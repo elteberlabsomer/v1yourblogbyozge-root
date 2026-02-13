@@ -29,9 +29,8 @@ export function Header({
         </button>
 
         <Link href="/" className="c-chrome-brand" aria-label="Home">
-       <span className="c-chrome-brand__mark">YourBlog</span>
-       </Link>
-
+          <span className="c-chrome-brand__mark">YourBlog</span>
+        </Link>
 
         <nav className="c-chrome-nav" aria-label="Primary navigation">
           <Link href="/" className="c-chrome-nav__link">

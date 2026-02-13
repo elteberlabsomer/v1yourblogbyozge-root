@@ -1,5 +1,8 @@
 .root {
   width: 100%;
+
+  --contact-control-h: calc(var(--space-12) + var(--space-2));
+  --contact-textarea-min-h: calc(var(--space-20) * 2);
 }
 
 .card {
@@ -20,8 +23,8 @@
 }
 
 .badge {
-  width: calc(var(--space-12) + var(--space-2));
-  height: calc(var(--space-12) + var(--space-2));
+  width: var(--contact-control-h);
+  height: var(--contact-control-h);
   border-radius: var(--radius-pill);
   background: var(--accent);
   color: var(--on-primary);
@@ -118,7 +121,7 @@
   display: block;
 
   /* Target height: space-12 + space-2 */
-  min-height: calc(var(--space-12) + var(--space-2));
+  min-height: var(--contact-control-h);
   padding: var(--space-3) var(--space-4);
 
   border: var(--border-width-1) solid var(--border-default);
@@ -148,7 +151,7 @@
   color: var(--text-ink);
 
   resize: vertical;
-  min-height: calc(var(--space-20) + var(--space-20));
+  min-height: var(--contact-textarea-min-h);
 }
 
 .consent-row {
@@ -191,7 +194,7 @@
 
 .button {
   width: 100%;
-  height: calc(var(--space-12) + var(--space-2));
+  height: var(--contact-control-h);
   border: 0;
   border-radius: var(--radius-md);
   background: var(--accent);

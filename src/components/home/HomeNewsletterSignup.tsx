@@ -1,6 +1,6 @@
-"use client";
+'use client';
 
-import { NewsletterSignup } from "../newsletter-signup/NewsletterSignup";
+import { NewsletterSignup } from '../newsletter-signup/NewsletterSignup';
 
 function sleep(ms: number) {
   return new Promise<void>((resolve) => {

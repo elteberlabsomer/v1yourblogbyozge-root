@@ -1,16 +1,26 @@
 .banner {
+  --quote-pad-x: calc(var(--space-20) + var(--space-5));
+
   background: var(--surface-1);
-  padding: var(--space-20) calc(var(--space-20) + var(--space-5));
+  padding: var(--space-20) var(--quote-pad-x);
   position: relative;
+
+  isolation: isolate;
+
+  --_z-foreground: 1;
+  --_z-content: 2;
 }
 
 .content {
+  --quote-author-col: calc(var(--space-20) + var(--space-20) + var(--space-10));
+  --quote-gap: calc(var(--space-12) + var(--space-3));
+
   position: relative;
-  z-index: 2;
+  z-index: var(--_z-content);
 
   display: grid;
-  grid-template-columns: calc(var(--space-20) + var(--space-20) + var(--space-10)) 1fr;
-  gap: calc(var(--space-12) + var(--space-3));
+  grid-template-columns: var(--quote-author-col) 1fr;
+  gap: var(--quote-gap);
   align-items: start;
 }
 
@@ -22,8 +32,10 @@
 }
 
 .avatarWrap {
-  width: calc(var(--space-20) + var(--space-10) + var(--space-5));
-  height: calc(var(--space-20) + var(--space-10) + var(--space-5));
+  --quote-avatar-size: calc(var(--space-20) + var(--space-10) + var(--space-5));
+
+  width: var(--quote-avatar-size);
+  height: var(--quote-avatar-size);
   border-radius: var(--radius-pill);
   overflow: hidden;
 
@@ -68,10 +80,12 @@
   text-align: left;
 
   position: relative;
-  z-index: 1;
+  z-index: var(--_z-foreground);
+
+  --quote-text-pad-right: calc(var(--space-20) + var(--space-8));
 
   padding-left: var(--space-10);
-  padding-right: calc(var(--space-20) + var(--space-8));
+  padding-right: var(--quote-text-pad-right);
 
   font-family: var(--font-display);
   font-weight: var(--font-weight-bold);
@@ -98,13 +112,15 @@
   justify-content: flex-end;
 
   position: relative;
-  z-index: 1;
+  z-index: var(--_z-foreground);
 }
 
 .cta {
   display: inline-flex;
   align-items: center;
   gap: var(--space-2);
+
+  --cta-lift-y: calc(var(--space-0) - var(--space-1));
 
   padding: var(--space-3-5) var(--space-7);
 
@@ -132,7 +148,7 @@
 .cta:hover {
   background: var(--surface-1);
   color: var(--accent);
-  transform: translateY(calc(var(--space-0) - var(--space-1)));
+  transform: translateY(var(--cta-lift-y));
 }
 
 .ctaLabel {

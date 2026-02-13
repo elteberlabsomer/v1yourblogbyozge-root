@@ -1,3 +1,4 @@
+import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 
 import { PostWallSquare } from '@/components/post-wall-square/PostWallSquare';
@@ -17,6 +18,50 @@ import styles from './page.module.css';
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+
+  const topic = await getTopicBySlug(slug);
+  if (!topic) {
+    return {
+      title: 'Not found',
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const title = `Topic: ${topic.label}`;
+  const description = `Latest posts in ${topic.label}.`;
+  const canonicalUrl = `/topics/${topic.slug}`;
+
+  const posts = await listPostsByTopicSlug(slug);
+  const first = posts[0] as any;
+
+  const coverSrc = pickCoverSrc(first);
+  const coverAlt = pickCoverAlt(first);
+
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, '');
+  const imageUrl = new URL(coverSrc, siteUrl).toString();
+
+  return {
+    title,
+    description,
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      type: 'website',
+      url: canonicalUrl,
+      title,
+      description,
+      images: [{ url: imageUrl, alt: coverAlt || title }],
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      images: [imageUrl],
+    },
+  };
+}
 
 export async function generateStaticParams() {
   const topics = await listTopics();
@@ -57,7 +102,9 @@ function mulberry32(seed: number) {
 }
 
 function pickRandom<T>(items: T[], count: number, seed: number): T[] {
-  if (items.length === 0) return [];
+  if (items.length === 0) {
+    return [];
+  }
   const rand = mulberry32(seed);
   const copy = [...items];
 
@@ -75,7 +122,9 @@ export default async function TopicDetailPage({ params }: PageProps) {
   const { slug } = await params;
 
   const topic = await getTopicBySlug(slug);
-  if (!topic) notFound();
+  if (!topic) {
+    notFound();
+  }
 
   const allTopicPosts = await listPostsByTopicSlug(slug);
   const latest14 = allTopicPosts.slice(0, 14);
@@ -89,7 +138,9 @@ export default async function TopicDetailPage({ params }: PageProps) {
     (p.tags ?? []).forEach((t) => {
       const tagSlug = toText(t.slug).toLowerCase();
       const tagLabel = toText(t.label);
-      if (tagSlug.length === 0 || tagLabel.length === 0) return;
+      if (tagSlug.length === 0 || tagLabel.length === 0) {
+        return;
+      }
 
       const existing = tagMap.get(tagSlug);
       if (existing) {
@@ -118,7 +169,7 @@ export default async function TopicDetailPage({ params }: PageProps) {
       }));
 
       return { tagSlug: t.slug, tagLabel: t.label, posts: mapped };
-    })
+    }),
   );
 
   return (

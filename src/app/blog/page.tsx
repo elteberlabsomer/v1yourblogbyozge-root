@@ -17,7 +17,9 @@ type BodyBlock = {
 };
 
 function renderBody(body: unknown): ReactNode {
-  if (!body) return null;
+  if (!body) {
+    return null;
+  }
 
   if (Array.isArray(body)) {
     return body.map((b, idx) => {
@@ -26,10 +28,16 @@ function renderBody(body: unknown): ReactNode {
       const kind = String(block.kind || '');
       const text = String(block.text || '');
 
-      if (!text) return null;
+      if (!text) {
+        return null;
+      }
 
-      if (kind === 'h2') return <h2 key={idx}>{text}</h2>;
-      if (kind === 'h3') return <h3 key={idx}>{text}</h3>;
+      if (kind === 'h2') {
+        return <h2 key={idx}>{text}</h2>;
+      }
+      if (kind === 'h3') {
+        return <h3 key={idx}>{text}</h3>;
+      }
 
       return <p key={idx}>{text}</p>;
     });
@@ -51,7 +59,9 @@ export async function generateMetadata({ params }: { params: RouteParams }) {
 
   const post = getDemoPostBySlug(slug);
 
-  if (!post) return { title: 'Not found' };
+  if (!post) {
+    return { title: 'Not found' };
+  }
 
   return {
     title: post.title,
@@ -64,7 +74,9 @@ export default async function BlogPostPage({ params }: { params: RouteParams }) 
 
   const post = getDemoPostBySlug(slug);
 
-  if (!post) notFound();
+  if (!post) {
+    notFound();
+  }
 
   const shareUrl = `${SITE_URL}/blog/${slug}`;
 

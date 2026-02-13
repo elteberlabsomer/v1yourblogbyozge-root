@@ -62,12 +62,12 @@ export default function AboutPage() {
             </ul>
 
             <h2>Contact</h2>
-           <p>
+            <p>
   If you’d like to reach me, use the{' '}
-  <Link href="/pages/contact">contact page</Link>
-  {' '}or email:{' '}
-  <a href="mailto:gulemeyenosgeguler@gmail.com">gulemeyenosgeguler@gmail.com</a>
-</p>
+              <Link href="/pages/contact">contact page</Link>
+              {' '}or email:{' '}
+              <a href="mailto:gulemeyenosgeguler@gmail.com">gulemeyenosgeguler@gmail.com</a>
+            </p>
 
           </Prose>
         </div>

@@ -34,7 +34,9 @@ export function NewsletterSignup({ onSubmit }: NewsletterSignupProps) {
 
   async function handleSubmit(event: FormEvent<HTMLFormElement>) {
     event.preventDefault();
-    if (status !== 'idle') return;
+    if (status !== 'idle') {
+      return;
+    }
 
     setStatus('submitting');
 

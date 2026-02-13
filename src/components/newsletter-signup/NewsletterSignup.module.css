@@ -4,6 +4,8 @@
   background: var(--surface-1);
   border-radius: var(--radius-md);
   padding: var(--space-10);
+
+  --newsletter-control-h: calc(var(--space-12) + var(--space-2));
 }
 
 .content {
@@ -28,8 +30,8 @@
 }
 
 .badge {
-  width: calc(var(--space-12) + var(--space-2));
-  height: calc(var(--space-12) + var(--space-2));
+  width: var(--newsletter-control-h);
+  height: var(--newsletter-control-h);
   border-radius: var(--radius-pill);
   background: var(--newsletter-accent);
   color: var(--on-primary);
@@ -88,7 +90,7 @@
   box-sizing: border-box;
   display: block;
 
-  min-height: calc(var(--space-12) + var(--space-2));
+  min-height: var(--newsletter-control-h);
   padding: var(--space-3) var(--space-4);
 
   border: var(--border-width-1) solid var(--border-default);
@@ -113,7 +115,7 @@
 
 .button {
   width: 100%;
-  height: calc(var(--space-12) + var(--space-2));
+  height: var(--newsletter-control-h);
   border: 0;
   border-radius: var(--radius-md);
 

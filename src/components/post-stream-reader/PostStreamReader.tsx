@@ -1,7 +1,7 @@
-"use client";
+'use client';
 
-import { useEffect, useMemo, useRef, useState } from "react";
-import Link from "next/link";
+import { useEffect, useMemo, useRef, useState } from 'react';
+import Link from 'next/link';
 
 import {
   DEMO_POSTS,
@@ -9,15 +9,15 @@ import {
   getDemoPostsByTag,
   getDemoPostsByTopic,
   type DemoPost,
-} from "@/lib/demo";
+} from '@/lib/demo';
 
-import { PostHeader } from "@/components/post-header/PostHeader";
-import { PostBody } from "@/components/post-body/PostBody";
-import { PostWallSquare } from "@/components/post-wall-square/PostWallSquare";
-import { MainGrid } from "@/components/main-grid/MainGrid";
-import { TagSpotlight, TopicSpotlight } from "@/components/tag-spotlight/TagSpotlight";
+import { PostHeader } from '@/components/post-header/PostHeader';
+import { PostBody } from '@/components/post-body/PostBody';
+import { PostWallSquare } from '@/components/post-wall-square/PostWallSquare';
+import { MainGrid } from '@/components/main-grid/MainGrid';
+import { TagSpotlight, TopicSpotlight } from '@/components/tag-spotlight/TagSpotlight';
 
-import pageStyles from "@/app/blog/[slug]/page.module.css";
+import pageStyles from '@/app/blog/[slug]/page.module.css';
 
 type Props = {
   initialSlug: string;
@@ -76,7 +76,7 @@ function toSpotlightPosts(
   return posts.map((p) => ({
     slug: p.slug,
     title: p.title,
-    coverSrc: p.coverSrc ?? "",
+    coverSrc: p.coverSrc ?? '',
     coverAlt: p.coverAlt ?? p.title,
   }));
 }
@@ -92,22 +92,28 @@ function pickOneByTag(
 
   const shuffled = seededShuffle(candidates, seed);
   const picked = shuffled[0];
-  if (!picked) return null;
+  if (!picked) {
+    return null;
+  }
 
   exclude.add(picked.slug);
   return picked;
 }
 
 function getHeaderOffset(): number {
-  const el = document.querySelector<HTMLElement>("[data-chrome-header]");
-  if (!el) return 0;
+  const el = document.querySelector<HTMLElement>('[data-chrome-header]');
+  if (!el) {
+    return 0;
+  }
   const rect = el.getBoundingClientRect();
   return Math.max(0, rect.bottom);
 }
 
 function buildThresholds(): number[] {
   const t: number[] = [0];
-  for (let i = 1; i <= 20; i++) t.push(i / 20);
+  for (let i = 1; i <= 20; i++) {
+    t.push(i / 20);
+  }
   return t;
 }
 
@@ -129,7 +135,9 @@ function PostStreamItem({
     const wallItemsMobile = selectedTagsMobile
       .map((tag) => {
         const picked = pickOneByTag(tag, `${post.slug}:wall:${tag.slug}`, usedMobile);
-        if (!picked) return null;
+        if (!picked) {
+          return null;
+        }
         return { tag, post: picked };
       })
       .filter(Boolean) as Array<{
@@ -156,7 +164,9 @@ function PostStreamItem({
         .sort(sortByDateDesc);
 
       const picked = seededShuffle(candidates, `${post.slug}:tagspot:${tag.slug}`).slice(0, 4);
-      for (const p of picked) usedWide.add(p.slug);
+      for (const p of picked) {
+        usedWide.add(p.slug);
+      }
 
       return { tag, posts: toSpotlightPosts(picked) };
     });
@@ -189,7 +199,9 @@ function PostStreamItem({
 
         <PostBody>
           {post.body.map((block, idx) => {
-            if (block.kind === "h2") return <h2 key={idx}>{block.text}</h2>;
+            if (block.kind === 'h2') {
+              return <h2 key={idx}>{block.text}</h2>;
+            }
             return <p key={idx}>{block.text}</p>;
           })}
         </PostBody>
@@ -267,7 +279,9 @@ export function PostStreamReader({ initialSlug }: Props) {
 
   const initialIndex = useMemo(() => {
     const p = getDemoPostBySlug(initialSlug);
-    if (!p) return 0;
+    if (!p) {
+      return 0;
+    }
     const idx = ordered.findIndex((x) => x.slug === p.slug);
     return idx >= 0 ? idx : 0;
   }, [initialSlug, ordered]);
@@ -288,7 +302,7 @@ export function PostStreamReader({ initialSlug }: Props) {
 
   const itemEls = useRef(new Map<string, HTMLElement>());
 
-  const activeSlugRef = useRef<string>(ordered[renderStart]?.slug ?? "");
+  const activeSlugRef = useRef<string>(ordered[renderStart]?.slug ?? '');
   const [activeSlug, setActiveSlug] = useState<string>(activeSlugRef.current);
 
   const navLockUntil = useRef<number>(0);
@@ -297,31 +311,43 @@ export function PostStreamReader({ initialSlug }: Props) {
   useEffect(() => {
     const onPointerDown = (e: PointerEvent) => {
       const target = e.target as HTMLElement | null;
-      const a = target?.closest?.("a");
-      if (a) navLockUntil.current = Date.now() + LINK_NAV_LOCK_MS;
+      const a = target?.closest?.('a');
+      if (a) {
+        navLockUntil.current = Date.now() + LINK_NAV_LOCK_MS;
+      }
     };
 
-    window.addEventListener("pointerdown", onPointerDown, true);
-    return () => window.removeEventListener("pointerdown", onPointerDown, true);
+    window.addEventListener('pointerdown', onPointerDown, true);
+    return () => window.removeEventListener('pointerdown', onPointerDown, true);
   }, []);
 
   useEffect(() => {
-    if (!activeSlug) return;
+    if (!activeSlug) {
+      return;
+    }
 
-    if (urlTimer.current !== null) window.clearTimeout(urlTimer.current);
+    if (urlTimer.current !== null) {
+      window.clearTimeout(urlTimer.current);
+    }
 
     urlTimer.current = window.setTimeout(() => {
-      if (Date.now() < navLockUntil.current) return;
-      if (!window.location.pathname.startsWith("/blog/")) return;
+      if (Date.now() < navLockUntil.current) {
+        return;
+      }
+      if (!window.location.pathname.startsWith('/blog/')) {
+        return;
+      }
 
       const nextPath = `/blog/${activeSlug}`;
       if (window.location.pathname !== nextPath) {
-        window.history.replaceState({}, "", nextPath);
+        window.history.replaceState({}, '', nextPath);
       }
     }, URL_DEBOUNCE_MS);
 
     return () => {
-      if (urlTimer.current !== null) window.clearTimeout(urlTimer.current);
+      if (urlTimer.current !== null) {
+        window.clearTimeout(urlTimer.current);
+      }
       urlTimer.current = null;
     };
   }, [activeSlug]);
@@ -333,14 +359,18 @@ export function PostStreamReader({ initialSlug }: Props) {
     const vis = new Map<string, { ratio: number; top: number; isIntersecting: boolean }>();
 
     const pickBest = () => {
-      if (Date.now() < navLockUntil.current) return;
+      if (Date.now() < navLockUntil.current) {
+        return;
+      }
 
       let bestSlug: string | null = null;
       let bestRatio = 0;
       let bestTop = Number.POSITIVE_INFINITY;
 
       for (const [slug, v] of vis) {
-        if (!v.isIntersecting) continue;
+        if (!v.isIntersecting) {
+          continue;
+        }
 
         if (v.ratio > bestRatio) {
           bestSlug = slug;
@@ -355,7 +385,9 @@ export function PostStreamReader({ initialSlug }: Props) {
         }
       }
 
-      if (!bestSlug) return;
+      if (!bestSlug) {
+        return;
+      }
 
       if (bestSlug !== activeSlugRef.current) {
         activeSlugRef.current = bestSlug;
@@ -379,7 +411,9 @@ export function PostStreamReader({ initialSlug }: Props) {
         (entries) => {
           for (const e of entries) {
             const slug = (e.target as HTMLElement).dataset.streamSlug;
-            if (!slug) continue;
+            if (!slug) {
+              continue;
+            }
 
             vis.set(slug, {
               ratio: e.intersectionRatio,
@@ -392,18 +426,20 @@ export function PostStreamReader({ initialSlug }: Props) {
         { root: null, rootMargin, threshold: thresholds },
       );
 
-      for (const el of itemEls.current.values()) observer.observe(el);
+      for (const el of itemEls.current.values()) {
+        observer.observe(el);
+      }
 
       pickBest();
     };
 
     const onResize = () => rebuild();
 
-    window.addEventListener("resize", onResize);
+    window.addEventListener('resize', onResize);
     rebuild();
 
     return () => {
-      window.removeEventListener("resize", onResize);
+      window.removeEventListener('resize', onResize);
       observer?.disconnect();
     };
   }, [ordered, total]);
@@ -411,7 +447,9 @@ export function PostStreamReader({ initialSlug }: Props) {
   // Attach new elements to the observer map as they mount.
   const indices = useMemo(() => {
     const out: number[] = [];
-    for (let i = renderStart; i <= renderEnd; i++) out.push(i);
+    for (let i = renderStart; i <= renderEnd; i++) {
+      out.push(i);
+    }
     return out;
   }, [renderStart, renderEnd]);
 
@@ -419,7 +457,9 @@ export function PostStreamReader({ initialSlug }: Props) {
     <>
       {indices.map((idx) => {
         const post = ordered[idx];
-        if (!post) return null;
+        if (!post) {
+          return null;
+        }
 
         return (
           <PostStreamItem

@@ -4,7 +4,7 @@ export type ContentRef = {
 };
 
 export type PostBodyBlock = {
-  kind: "p" | "h2";
+  kind: 'p' | 'h2';
   text: string;
 };
 

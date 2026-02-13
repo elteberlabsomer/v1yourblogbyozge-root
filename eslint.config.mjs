@@ -1,11 +1,14 @@
 import js from '@eslint/js';
+import tseslint from 'typescript-eslint';
 import react from 'eslint-plugin-react';
 import reactHooks from 'eslint-plugin-react-hooks';
 import jsxA11y from 'eslint-plugin-jsx-a11y';
 import importPlugin from 'eslint-plugin-import';
+import nextPlugin from '@next/eslint-plugin-next';
 
-export default [
+export default tseslint.config(
   js.configs.recommended,
+  ...tseslint.configs.recommended,
   {
     files: ['**/*.{js,jsx,mjs,cjs,ts,tsx}'],
     plugins: {
@@ -13,6 +16,7 @@ export default [
       'react-hooks': reactHooks,
       'jsx-a11y': jsxA11y,
       'import': importPlugin,
+      '@next/next': nextPlugin,
     },
     languageOptions: {
       parserOptions: {
@@ -43,12 +47,16 @@ export default [
       },
     },
     rules: {
+      // TypeScript specific
+      '@typescript-eslint/no-unused-vars': 'warn',
+      '@typescript-eslint/no-explicit-any': 'warn',
+      
       // Airbnb style rules
-      'indent': ['error', 2],
-      'quotes': ['error', 'single'],
+      'indent': ['error', 2, { SwitchCase: 1 }],
+      'quotes': ['error', 'single', { avoidEscape: true }],
       'semi': ['error', 'always'],
       'comma-dangle': ['error', 'always-multiline'],
-      'no-unused-vars': 'warn',
+      'no-unused-vars': 'off', // TypeScript handles this
       'no-console': 'warn',
       'eqeqeq': ['error', 'always'],
       'curly': ['error', 'all'],
@@ -67,7 +75,7 @@ export default [
       // React rules
       'react/jsx-uses-react': 'off',
       'react/react-in-jsx-scope': 'off',
-      'react/prop-types': 'warn',
+      'react/prop-types': 'off', // TypeScript handles this
       'react/jsx-key': 'error',
       'react/jsx-no-duplicate-props': 'error',
       'react/jsx-no-undef': 'error',
@@ -110,4 +118,4 @@ export default [
       '*.config.mjs',
     ],
   },
-];
+);

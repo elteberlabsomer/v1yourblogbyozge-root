@@ -19,6 +19,12 @@
   overflow: hidden;
   border-radius: var(--radius-md);
   background: var(--palette-black);
+
+  isolation: isolate;
+
+  --_z-underlay: 1;
+  --_z-overlay: 2;
+  --_z-content: 3;
 }
 
 .heroImg {
@@ -44,7 +50,7 @@
 .scrim {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: var(--_z-underlay);
   pointer-events: none;
   background: linear-gradient(
     180deg,
@@ -58,7 +64,7 @@
 .playOverlay {
   position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: var(--_z-overlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -69,7 +75,7 @@
 .playOverlaySm {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: var(--_z-underlay);
   display: flex;
   align-items: center;
   justify-content: center;
@@ -78,10 +84,12 @@
 }
 
 .playIconLg {
-  width: calc(var(--space-12) * 2);
-  height: calc(var(--space-12) * 2);
+  --play-icon-lg-size: calc(var(--space-12) * 2);
+
+  width: var(--play-icon-lg-size);
+  height: var(--play-icon-lg-size);
   filter: drop-shadow(
-    0 var(--space-2) calc(var(--space-6) - var(--radius-sm)) var(--palette-black-a60)
+    0 var(--space-2) calc(var(--space-6) - var(--space-0-5)) var(--palette-black-a60)
   );
 }
 
@@ -89,7 +97,7 @@
   width: var(--text-48);
   height: var(--text-48);
   filter: drop-shadow(
-    0 calc(var(--space-2) - var(--radius-sm)) var(--space-3-5) var(--palette-black-a60)
+    0 calc(var(--space-2) - var(--space-0-5)) var(--space-3-5) var(--palette-black-a60)
   );
 }
 
@@ -101,11 +109,11 @@
 }
 
 .mediaLink {
-  z-index: 3;
+  z-index: var(--_z-content);
 }
 
 .mediaLinkSm {
-  z-index: 3;
+  z-index: var(--_z-overlay);
 }
 
 .hit {
@@ -118,7 +126,7 @@
   left: 0;
   right: 0;
   bottom: 0;
-  z-index: 4;
+  z-index: var(--_z-content);
   padding: var(--space-6);
   display: grid;
   gap: var(--space-3);
@@ -132,7 +140,7 @@
   color: var(--text-inverse);
   text-decoration: none;
   font-family: var(--font-display);
-  font-size: calc(var(--fs-h2) - var(--radius-sm));
+  font-size: calc(var(--fs-h2) - var(--space-0-5));
   line-height: calc(var(--leading-tight) - 0.05);
   font-weight: var(--font-weight-semibold);
   text-shadow: var(--shadow-text-on-media);
@@ -164,6 +172,13 @@
   overflow: hidden;
   border-radius: var(--radius-sm);
   background: var(--palette-black);
+
+  isolation: isolate;
+
+  --_z-underlay: 1;
+  --_z-overlay: 2;
+    --_z-content: 3;
+
 }
 
 .rowImg {
@@ -174,7 +189,7 @@
 
 .rowBody {
   display: grid;
-  gap: calc(var(--space-3) - var(--radius-sm));
+  gap: calc(var(--space-3) - var(--space-0-5));
   min-width: 0;
   align-content: center;
 }

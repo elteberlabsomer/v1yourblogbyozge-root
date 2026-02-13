@@ -1,14 +1,17 @@
 /* Topics (Detail) */
 
 .page {
+  --topic-grid-min-col: calc(var(--space-20) * 3);
+  --topic-bleed-offset: calc(50% - 50vw);
+
   width: 100%;
 }
 
 /* HERO: full-bleed (breaks out of container) */
 .heroBleed {
   width: 100vw;
-  margin-left: calc(50% - 50vw);
-  margin-right: calc(50% - 50vw);
+  margin-left: var(--topic-bleed-offset);
+  margin-right: var(--topic-bleed-offset);
 }
 
 .tiles {
@@ -16,7 +19,7 @@
   display: grid;
   grid-template-columns: repeat(
     auto-fit,
-    minmax(min(100%, calc(var(--space-20) * 3)), 1fr)
+    minmax(min(100%, var(--topic-grid-min-col)), 1fr)
   );
   gap: 0;
 }
@@ -86,7 +89,7 @@
 .mainGrid {
   grid-template-columns: repeat(
     auto-fit,
-    minmax(min(100%, calc(var(--space-20) * 3)), 1fr)
+    minmax(min(100%, var(--topic-grid-min-col)), 1fr)
   );
   gap: var(--space-6);
 }
@@ -96,7 +99,7 @@
   display: grid;
   grid-template-columns: repeat(
     auto-fit,
-    minmax(min(100%, calc(var(--space-20) * 3)), 1fr)
+    minmax(min(100%, var(--topic-grid-min-col)), 1fr)
   );
   gap: var(--space-6);
 }

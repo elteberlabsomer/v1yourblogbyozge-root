@@ -5,6 +5,15 @@
   border-radius: calc(var(--radius-xl) + var(--radius-xl));
   padding: var(--space-10);
 
+  --social-card-lift-y: calc(var(--space-2) - var(--space-4));
+  --social-orb-size: calc(
+    var(--space-20) + var(--space-20) + var(--space-20) + var(--space-12) +
+      var(--space-3)
+  );
+  --social-orb-offset: calc(var(--space-0) - (var(--space-20) + var(--space-5)));
+  --social-stripe-size: calc(var(--space-20) + var(--space-20) + var(--space-10));
+  --social-stripe-offset: calc(var(--space-0) - var(--space-12-5));
+
   display: flex;
   flex-direction: column;
   justify-content: space-between;
@@ -12,6 +21,9 @@
   position: relative;
   overflow: hidden;
   isolation: isolate;
+
+  --_z-decor: 0;
+  --_z-content: 1;
 
   cursor: pointer;
   text-decoration: none;
@@ -28,7 +40,7 @@
 }
 
 .card:hover {
-  transform: translateY(calc(var(--space-2) - var(--space-4)));
+  transform: translateY(var(--social-card-lift-y));
   box-shadow: var(--shadow-xl);
 }
 
@@ -54,55 +66,49 @@
   content: "";
   position: absolute;
 
-  width: calc(
-    var(--space-20) + var(--space-20) + var(--space-20) + var(--space-12) +
-      var(--space-3)
-  );
-  height: calc(
-    var(--space-20) + var(--space-20) + var(--space-20) + var(--space-12) +
-      var(--space-3)
-  );
+  width: var(--social-orb-size);
+  height: var(--social-orb-size);
 
   border-radius: var(--radius-pill);
   opacity: 0.1;
   background: var(--text-inverse);
 
-  z-index: 0;
+  z-index: var(--_z-decor);
   pointer-events: none;
 }
 
 .twitterCard::before {
-  top: calc(var(--space-0) - (var(--space-20) + var(--space-5)));
-  right: calc(var(--space-0) - (var(--space-20) + var(--space-5)));
+  top: var(--social-orb-offset);
+  right: var(--social-orb-offset);
 }
 
 .redditCard::before {
-  bottom: calc(var(--space-0) - (var(--space-20) + var(--space-5)));
-  left: calc(var(--space-0) - (var(--space-20) + var(--space-5)));
+  bottom: var(--social-orb-offset);
+  left: var(--social-orb-offset);
 }
 
 .card::after {
   content: "";
   position: absolute;
 
-  width: calc(var(--space-20) + var(--space-20) + var(--space-10));
-  height: calc(var(--space-20) + var(--space-20) + var(--space-10));
+  width: var(--social-stripe-size);
+  height: var(--social-stripe-size);
 
   background: var(--palette-white-a05);
   transform: rotate(45deg);
 
-  z-index: 0;
+  z-index: var(--_z-decor);
   pointer-events: none;
 }
 
 .twitterCard::after {
-  top: calc(var(--space-0) - var(--space-12-5));
-  left: calc(var(--space-0) - var(--space-12-5));
+  top: var(--social-stripe-offset);
+  left: var(--social-stripe-offset);
 }
 
 .redditCard::after {
-  bottom: calc(var(--space-0) - var(--space-12-5));
-  right: calc(var(--space-0) - var(--space-12-5));
+  bottom: var(--social-stripe-offset);
+  right: var(--social-stripe-offset);
 }
 
 .header {
@@ -111,7 +117,7 @@
   gap: var(--space-4);
 
   position: relative;
-  z-index: 1;
+  z-index: var(--_z-content);
 }
 
 .avatar {
@@ -155,7 +161,7 @@
   justify-content: space-between;
 
   position: relative;
-  z-index: 1;
+  z-index: var(--_z-content);
 }
 
 .platformLogo {

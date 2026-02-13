@@ -2,13 +2,11 @@ export {
   DEMO_POSTS,
   getDemoAllSlugs,
   getDemoPostBySlug,
+  getDemoCanonicalSlugForLegacySlug,
   getDemoPostsByTag,
   getDemoPostsByTopic,
   getDemoTags,
   getDemoTopics,
-} from "./demoPosts";
+} from './demoPosts';
 
-export type { DemoPost, DemoTag } from "./demoPosts";
-
-
-
+export type { DemoPost, DemoTag } from './demoPosts';

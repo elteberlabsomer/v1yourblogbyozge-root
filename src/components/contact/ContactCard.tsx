@@ -27,10 +27,18 @@ export function ContactCard() {
   const [consent, setConsent] = useState<boolean>(false);
 
   const canSubmit = useMemo(() => {
-    if (!name.trim()) return false;
-    if (!normalizeEmail(email)) return false;
-    if (!message.trim()) return false;
-    if (!consent) return false;
+    if (!name.trim()) {
+      return false;
+    }
+    if (!normalizeEmail(email)) {
+      return false;
+    }
+    if (!message.trim()) {
+      return false;
+    }
+    if (!consent) {
+      return false;
+    }
     return status !== 'sending';
   }, [name, email, message, consent, status]);
 

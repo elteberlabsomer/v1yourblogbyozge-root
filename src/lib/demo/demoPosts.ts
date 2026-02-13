@@ -14,291 +14,170 @@ export type DemoPost = {
   coverSrc: string;
   coverAlt: string;
   tags: DemoTag[];
-  body: Array<{ kind: "p" | "h2"; text: string }>;
+  body: Array<{ kind: 'p' | 'h2'; text: string }>;
 };
 
 type TopicSlug =
-  | "art"
-  | "history"
-  | "literature"
-  | "music"
-  | "relationships"
-  | "science"
-  | "screen"
-  | "sports"
-  | "technology"
-  | "true-crime";
+  | 'art'
+  | 'history'
+  | 'literature'
+  | 'music'
+  | 'relationships'
+  | 'science'
+  | 'screen'
+  | 'sports'
+  | 'technology'
+  | 'true-crime';
 
-const TOPICS: ReadonlyArray<{
-  slug: TopicSlug;
+type Topic = {
   label: string;
+  slug: TopicSlug;
   coverAlt: string;
-}> = [
-  { slug: "art", label: "Art", coverAlt: "Art thumbnail" },
-  { slug: "history", label: "History", coverAlt: "History thumbnail" },
-  { slug: "literature", label: "Literature", coverAlt: "Literature thumbnail" },
-  { slug: "music", label: "Music", coverAlt: "Music thumbnail" },
-  { slug: "relationships", label: "Relationships", coverAlt: "Relationships thumbnail" },
-  { slug: "science", label: "Science", coverAlt: "Science thumbnail" },
-  { slug: "screen", label: "Screen", coverAlt: "Screen thumbnail" },
-  { slug: "sports", label: "Sports", coverAlt: "Sports thumbnail" },
-  { slug: "technology", label: "Technology", coverAlt: "Technology thumbnail" },
-  { slug: "true-crime", label: "True Crime", coverAlt: "True Crime thumbnail" },
-];
-
-const TOPIC_TITLES: Record<TopicSlug, ReadonlyArray<string>> = {
-  art: [
-    "The quiet power of negative space in modern posters",
-    "Why palettes feel different under warm indoor light",
-    "A simple method to study composition without copying",
-    "How to build a visual library that actually helps",
-    "The case for slower typography decisions",
-    "What makes a grid feel calm instead of rigid",
-    "A practical way to critique your own work",
-    "The hidden rhythm of editorial layouts",
-    "When illustration should stay imperfect",
-    "A gentle approach to building style consistency",
-  ],
-  history: [
-    "How small trade routes shaped big cultural shifts",
-    "What letters reveal about everyday life in the past",
-    "Why borders moved faster than people realized",
-    "A short guide to reading old maps critically",
-    "The overlooked role of logistics in empires",
-    "How explaining history changes what you remember",
-    "What public records can and cannot tell us",
-    "Why timelines rarely explain cause and effect",
-    "The myths we inherit from simplified narratives",
-    "A calm way to research without getting lost",
-  ],
-  literature: [
-    "What makes a paragraph feel inevitable",
-    "How to read dialogue for subtext, not plot",
-    "A simple trick for noticing structure in novels",
-    "Why some metaphors feel tired and others live",
-    "What editors look for in a strong opening page",
-    "How to keep a voice consistent across chapters",
-    "The quiet difference between tone and style",
-    "What re-reading teaches that highlights never do",
-    "How writers create momentum without action scenes",
-    "A method for collecting quotes without hoarding",
-  ],
-  music: [
-    "Why repeating a motif can feel fresh each time",
-    "How dynamics shape emotion more than melody",
-    "A calm way to practice with intention",
-    "What makes a chorus memorable without volume",
-    "How to hear arrangement choices in pop tracks",
-    "The role of silence in powerful songwriting",
-    "Why tempo changes feel like narrative turns",
-    "A guide to listening for texture and space",
-    "How rhythm carries meaning across genres",
-    "Small habits that improve musical taste over time",
-  ],
-  relationships: [
-    "The difference between clarity and control",
-    "How to ask questions that invite honesty",
-    "What healthy boundaries look like in practice",
-    "A gentle way to handle recurring conflict",
-    "Why reassurance works better than arguments",
-    "How to repair small ruptures quickly",
-    "What it means to listen without fixing",
-    "The subtle signs of mutual respect",
-    "How to disagree without building resentment",
-    "A simple framework for better conversations",
-  ],
-  science: [
-    "How to read a paper without drowning in methods",
-    "Why uncertainty is a feature, not a flaw",
-    "A simple checklist for evaluating claims",
-    "What replication actually changes in a field",
-    "How to build intuition with small experiments",
-    "Why models are useful even when they are wrong",
-    "The hidden assumptions inside common graphs",
-    "A calm guide to statistical literacy",
-    "How to compare explanations fairly",
-    "What good science communication avoids doing",
-  ],
-  screen: [
-    "Why pacing matters more than plot twists",
-    "How to notice visual motifs in cinematography",
-    "The quiet craft behind believable dialogue",
-    "What editing does that you never see",
-    "How sound design shapes the story",
-    "Why some scenes feel long in a good way",
-    "A simple way to review films with structure",
-    "How to spot theme without over-reading",
-    "What makes a series rewatchable",
-    "The difference between mood and message",
-  ],
-  sports: [
-    "What consistency looks like in real training blocks",
-    "How recovery affects performance more than hype",
-    "Why fundamentals beat novelty over time",
-    "A calm guide to tracking progress",
-    "What coaches mean by game intelligence",
-    "How routines reduce decision fatigue",
-    "The role of confidence in close matches",
-    "How to watch a game more analytically",
-    "Why small habits win seasons",
-    "How to set goals that survive setbacks",
-  ],
-  technology: [
-    "Why good systems feel boring in the best way",
-    "How to design interfaces with fewer regrets",
-    "A simple way to name things consistently",
-    "What quality gates really protect you from",
-    "How to refactor without losing momentum",
-    "Why tokens make design decisions reusable",
-    "How to keep a component library coherent",
-    "The difference between polish and complexity",
-    "A calm approach to performance work",
-    "How to document decisions so future-you wins",
-  ],
-  "true-crime": [
-    "How narratives bias what we think we know",
-    "What evidence feels like when you slow down",
-    "Why timelines can mislead as much as they help",
-    "How to read sources without sensationalism",
-    "What makes a case summary actually useful",
-    "How to separate facts from interpretations",
-    "Why details get repeated even when unverified",
-    "A calm framework for ethical storytelling",
-    "How context changes every conclusion",
-    "What to do when sources disagree",
-  ],
 };
 
-const TOPIC_TAGS: Record<TopicSlug, ReadonlyArray<DemoTag>> = {
+const TOPICS: Topic[] = [
+  { label: 'Art', slug: 'art', coverAlt: 'Abstract art cover' },
+  { label: 'History', slug: 'history', coverAlt: 'History cover' },
+  { label: 'Literature', slug: 'literature', coverAlt: 'Literature cover' },
+  { label: 'Music', slug: 'music', coverAlt: 'Music cover' },
+  { label: 'Relationships', slug: 'relationships', coverAlt: 'Relationships cover' },
+  { label: 'Science', slug: 'science', coverAlt: 'Science cover' },
+  { label: 'Screen', slug: 'screen', coverAlt: 'Screen cover' },
+  { label: 'Sports', slug: 'sports', coverAlt: 'Sports cover' },
+  { label: 'Technology', slug: 'technology', coverAlt: 'Technology cover' },
+  { label: 'True Crime', slug: 'true-crime', coverAlt: 'True crime cover' },
+];
+
+const TOPIC_TITLES: Record<TopicSlug, string[]> = {
   art: [
-    { label: "composition", slug: "composition" },
-    { label: "typography", slug: "typography" },
-    { label: "color", slug: "color" },
-    { label: "layout", slug: "layout" },
-    { label: "process", slug: "process" },
-    { label: "reference", slug: "reference" },
-    { label: "critique", slug: "critique" },
-    { label: "visual-library", slug: "visual-library" },
-    { label: "tools", slug: "tools" },
-    { label: "poster", slug: "poster" },
+    'The quiet power of negative space',
+    'Why good posters feel inevitable',
+    'Color as a decision, not decoration',
+    'How to critique work without flattening it',
+    'The craft of a memorable icon',
+    'A short history of the grid',
+    'The case for fewer typefaces',
+    'Designing for the room, not the page',
+    'Texture, restraint, and meaning',
+    'When style becomes a shortcut',
   ],
   history: [
-    { label: "maps", slug: "maps" },
-    { label: "archives", slug: "archives" },
-    { label: "trade", slug: "trade" },
-    { label: "empires", slug: "empires" },
-    { label: "letters", slug: "letters" },
-    { label: "logistics", slug: "logistics" },
-    { label: "timeline", slug: "timeline" },
-    { label: "context", slug: "context" },
-    { label: "sources", slug: "sources" },
-    { label: "myths", slug: "myths" },
+    'How archives shape our memory',
+    'The politics of a map',
+    'Why dates are never neutral',
+    'A small city with a long shadow',
+    'The invention of “tradition”',
+    'Letters that changed a century',
+    'The biography of a tool',
+    'Borders as stories we tell',
+    'An empire in footnotes',
+    'When the past becomes branding',
   ],
   literature: [
-    { label: "voice", slug: "voice" },
-    { label: "structure", slug: "structure" },
-    { label: "dialogue", slug: "dialogue" },
-    { label: "metaphor", slug: "metaphor" },
-    { label: "editing", slug: "editing" },
-    { label: "reading", slug: "reading" },
-    { label: "quotes", slug: "quotes" },
-    { label: "tone", slug: "tone" },
-    { label: "craft", slug: "craft" },
-    { label: "openings", slug: "openings" },
+    'What makes a paragraph feel inevitable',
+    'Why some sentences outlive their authors',
+    'Close reading as a craft',
+    'The romance of the unfinished',
+    'A note on translation and loss',
+    'Characters who refuse to behave',
+    'The ethics of a narrator',
+    'On rereading and becoming someone else',
+    'A plot is a promise',
+    'How dialogue reveals power',
   ],
   music: [
-    { label: "arrangement", slug: "arrangement" },
-    { label: "dynamics", slug: "dynamics" },
-    { label: "rhythm", slug: "rhythm" },
-    { label: "melody", slug: "melody" },
-    { label: "practice", slug: "practice" },
-    { label: "listening", slug: "listening" },
-    { label: "texture", slug: "texture" },
-    { label: "tempo", slug: "tempo" },
-    { label: "songwriting", slug: "songwriting" },
-    { label: "motifs", slug: "motifs" },
+    'The moment a chorus earns itself',
+    'A melody you can’t unhear',
+    'Silence as arrangement',
+    'The psychology of repetition',
+    'When production is storytelling',
+    'A drum pattern’s secret job',
+    'What “tight” really means',
+    'The beauty of restraint in mixing',
+    'Listening like a musician',
+    'A song as a small architecture',
   ],
   relationships: [
-    { label: "boundaries", slug: "boundaries" },
-    { label: "communication", slug: "communication" },
-    { label: "repair", slug: "repair" },
-    { label: "respect", slug: "respect" },
-    { label: "conflict", slug: "conflict" },
-    { label: "clarity", slug: "clarity" },
-    { label: "listening", slug: "listening" },
-    { label: "trust", slug: "trust" },
-    { label: "honesty", slug: "honesty" },
-    { label: "frameworks", slug: "frameworks" },
+    'Boundaries are not walls',
+    'Why reassurance doesn’t stick',
+    'The hidden math of resentment',
+    'Attachment as a lens, not a label',
+    'Repair is a skill',
+    'How to argue without damage',
+    'The stories we inherit about love',
+    'On choosing kindness over control',
+    'What “being seen” requires',
+    'The courage of a clear ask',
   ],
   science: [
-    { label: "papers", slug: "papers" },
-    { label: "uncertainty", slug: "uncertainty" },
-    { label: "statistics", slug: "statistics" },
-    { label: "replication", slug: "replication" },
-    { label: "models", slug: "models" },
-    { label: "graphs", slug: "graphs" },
-    { label: "methods", slug: "methods" },
-    { label: "claims", slug: "claims" },
-    { label: "communication", slug: "communication" },
-    { label: "experiments", slug: "experiments" },
+    'Why uncertainty is honest',
+    'The seduction of a clean result',
+    'A note on replication',
+    'When models become myths',
+    'Correlation is not a confession',
+    'The beauty of a good question',
+    'How measurements lie',
+    'Science as a social process',
+    'The cost of being wrong',
+    'The joy of a surprising null',
   ],
   screen: [
-    { label: "cinematography", slug: "cinematography" },
-    { label: "editing", slug: "editing" },
-    { label: "sound", slug: "sound" },
-    { label: "dialogue", slug: "dialogue" },
-    { label: "pacing", slug: "pacing" },
-    { label: "motifs", slug: "motifs" },
-    { label: "theme", slug: "theme" },
-    { label: "review", slug: "review" },
-    { label: "series", slug: "series" },
-    { label: "story", slug: "story" },
+    'Editing as empathy',
+    'A scene’s invisible contract',
+    'Why some endings feel cheap',
+    'The grammar of a close-up',
+    'Blocking as meaning',
+    'When spectacle replaces story',
+    'A character arc is a vector',
+    'The pace of attention',
+    'Sound design as narrative',
+    'The power of an ordinary frame',
   ],
   sports: [
-    { label: "training", slug: "training" },
-    { label: "recovery", slug: "recovery" },
-    { label: "fundamentals", slug: "fundamentals" },
-    { label: "habits", slug: "habits" },
-    { label: "coaching", slug: "coaching" },
-    { label: "goals", slug: "goals" },
-    { label: "mindset", slug: "mindset" },
-    { label: "analysis", slug: "analysis" },
-    { label: "routine", slug: "routine" },
-    { label: "progress", slug: "progress" },
+    'Pressure is a teacher',
+    'Why fundamentals win late',
+    'Training the mind, not only the body',
+    'The myth of “clutch”',
+    'Recovery is performance',
+    'A season is an ecosystem',
+    'What repetition actually builds',
+    'Discipline versus obsession',
+    'The beauty of a simple play',
+    'How teams become cultures',
   ],
   technology: [
-    { label: "systems", slug: "systems" },
-    { label: "ui", slug: "ui" },
-    { label: "components", slug: "components" },
-    { label: "tokens", slug: "tokens" },
-    { label: "refactor", slug: "refactor" },
-    { label: "performance", slug: "performance" },
-    { label: "docs", slug: "docs" },
-    { label: "quality", slug: "quality" },
-    { label: "naming", slug: "naming" },
-    { label: "architecture", slug: "architecture" },
+    'The cost of convenience',
+    'Interfaces as ethics',
+    'A tiny bug with big consequences',
+    'Why defaults matter',
+    'Latency is a feeling',
+    'The craft of a good abstraction',
+    'When automation creates work',
+    'A note on reliability',
+    'Designing for failure',
+    'Complexity is a budget',
   ],
-  "true-crime": [
-    { label: "sources", slug: "sources" },
-    { label: "evidence", slug: "evidence" },
-    { label: "ethics", slug: "ethics" },
-    { label: "timeline", slug: "timeline" },
-    { label: "media", slug: "media" },
-    { label: "psychology", slug: "psychology" },
-    { label: "forensics", slug: "forensics" },
-    { label: "court-docs", slug: "court-docs" },
-    { label: "justice", slug: "justice" },
-    { label: "context", slug: "context" },
+  'true-crime': [
+    'Narratives that flatter violence',
+    'The difference between interest and exploitation',
+    'Evidence is not a vibe',
+    'On sensationalism and harm',
+    'Why context is everything',
+    'When podcasts become courts',
+    'The problem with certainty',
+    'How stories erase victims',
+    'The ethics of attention',
+    'A case study in bias',
   ],
 };
 
 const DEMO_COVER_POOL: ReadonlyArray<string> = Array.from({ length: 20 }, (_, i) => {
-  const n = String(i + 1).padStart(2, "0");
+  const n = String(i + 1).padStart(2, '0');
   return `/demo/archive/${n}.jpg`;
 });
 
-const VIDEO_TAG: DemoTag = { label: "Videos", slug: "videos" };
-const LUCKY_TAG: DemoTag = { label: "Are You Lucky", slug: "are-you-lucky" };
+const VIDEO_TAG: DemoTag = { label: 'Videos', slug: 'videos' };
+const LUCKY_TAG: DemoTag = { label: 'Are You Lucky', slug: 'are-you-lucky' };
 
 function withVideoTag(tags: DemoTag[]): DemoTag[] {
   const rest = tags.filter((t) => t.slug !== VIDEO_TAG.slug);
@@ -310,91 +189,189 @@ function withLuckyTag(tags: DemoTag[]): DemoTag[] {
   return [LUCKY_TAG, ...rest].slice(0, 3);
 }
 
-function isoFromUtc(baseIso: string, daysBack: number): string {
-  const d = new Date(`${baseIso}T00:00:00.000Z`);
-  d.setUTCDate(d.getUTCDate() - daysBack);
-  return d.toISOString().slice(0, 10);
+function isoFromUtc(baseIso: string, offsetDays: number): string {
+  const base = new Date(`${baseIso}T00:00:00.000Z`);
+  base.setUTCDate(base.getUTCDate() + offsetDays);
+  return base.toISOString();
 }
 
 function slugify(input: string): string {
   return input
     .toLowerCase()
-    .replace(/’/g, "")
-    .replace(/[^a-z0-9]+/g, "-")
-    .replace(/^-+|-+$/g, "");
+    .trim()
+    .replace(/['"]/g, '')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/(^-|-$)+/g, '');
 }
 
-function pick3Tags(topic: TopicSlug, i: number): DemoTag[] {
-  const pool = TOPIC_TAGS[topic];
-  const a = pool[(i * 3) % pool.length];
-  const b = pool[(i * 3 + 5) % pool.length];
-  const c = pool[(i * 3 + 9) % pool.length];
+function pick3Tags(topic: TopicSlug, index: number): DemoTag[] {
+  const tagsByTopic: Record<TopicSlug, DemoTag[]> = {
+    art: [
+      { label: 'Composition', slug: 'composition' },
+      { label: 'Typography', slug: 'typography' },
+      { label: 'Critique', slug: 'critique' },
+      { label: 'Color', slug: 'color' },
+      { label: 'Visual systems', slug: 'visual-systems' },
+    ],
+    history: [
+      { label: 'Archives', slug: 'archives' },
+      { label: 'Maps', slug: 'maps' },
+      { label: 'Empires', slug: 'empires' },
+      { label: 'Memory', slug: 'memory' },
+      { label: 'Sources', slug: 'sources' },
+    ],
+    literature: [
+      { label: 'Craft', slug: 'craft' },
+      { label: 'Reading', slug: 'reading' },
+      { label: 'Style', slug: 'style' },
+      { label: 'Narrators', slug: 'narrators' },
+      { label: 'Translation', slug: 'translation' },
+    ],
+    music: [
+      { label: 'Arrangement', slug: 'arrangement' },
+      { label: 'Mixing', slug: 'mixing' },
+      { label: 'Listening', slug: 'listening' },
+      { label: 'Rhythm', slug: 'rhythm' },
+      { label: 'Songwriting', slug: 'songwriting' },
+    ],
+    relationships: [
+      { label: 'Boundaries', slug: 'boundaries' },
+      { label: 'Attachment', slug: 'attachment' },
+      { label: 'Repair', slug: 'repair' },
+      { label: 'Communication', slug: 'communication' },
+      { label: 'Conflict', slug: 'conflict' },
+    ],
+    science: [
+      { label: 'Uncertainty', slug: 'uncertainty' },
+      { label: 'Methods', slug: 'methods' },
+      { label: 'Models', slug: 'models' },
+      { label: 'Evidence', slug: 'evidence' },
+      { label: 'Replication', slug: 'replication' },
+    ],
+    screen: [
+      { label: 'Editing', slug: 'editing' },
+      { label: 'Cinematography', slug: 'cinematography' },
+      { label: 'Sound', slug: 'sound' },
+      { label: 'Story', slug: 'story' },
+      { label: 'Pacing', slug: 'pacing' },
+    ],
+    sports: [
+      { label: 'Training', slug: 'training' },
+      { label: 'Recovery', slug: 'recovery' },
+      { label: 'Mindset', slug: 'mindset' },
+      { label: 'Teams', slug: 'teams' },
+      { label: 'Fundamentals', slug: 'fundamentals' },
+    ],
+    technology: [
+      { label: 'Reliability', slug: 'reliability' },
+      { label: 'Interfaces', slug: 'interfaces' },
+      { label: 'Performance', slug: 'performance' },
+      { label: 'Systems', slug: 'systems' },
+      { label: 'Defaults', slug: 'defaults' },
+    ],
+    'true-crime': [
+      { label: 'Ethics', slug: 'ethics' },
+      { label: 'Evidence', slug: 'evidence' },
+      { label: 'Bias', slug: 'bias' },
+      { label: 'Context', slug: 'context' },
+      { label: 'Narrative', slug: 'narrative' },
+    ],
+  };
 
-  if (a.slug !== b.slug && a.slug !== c.slug && b.slug !== c.slug) return [a, b, c];
-
-  const out: DemoTag[] = [a];
-  for (const cand of [b, c, ...pool]) {
-    if (out.some((t) => t.slug === cand.slug)) continue;
-    out.push(cand);
-    if (out.length === 3) break;
-  }
-  return out;
+  const pool = tagsByTopic[topic];
+  const a = pool[index % pool.length];
+  const b = pool[(index + 1) % pool.length];
+  const c = pool[(index + 2) % pool.length];
+  return [a, b, c];
 }
 
 function makeSummary(topicLabel: string): string {
-  return `A concise ${topicLabel.toLowerCase()} note with clear takeaways and a calm structure.`;
+  return `A short, structured note on ${topicLabel.toLowerCase()}—with a focus on craft, clarity, and decisions that compound.`;
 }
 
-function makeBody(relatedLink: string): Array<{ kind: "p" | "h2"; text: string }> {
+function makeBody(relatedLink: string): Array<{ kind: 'p' | 'h2'; text: string }> {
   return [
-    { kind: "p", text: "This is demo body content rendered inside PostBody." },
-    { kind: "p", text: "Short paragraphs keep layouts realistic and easy to scan." },
-    { kind: "h2", text: "Key idea" },
-    { kind: "p", text: "Keep one idea per paragraph, then add one concrete example." },
-    { kind: "p", text: relatedLink },
+    { kind: 'p', text: 'A paragraph earns trust by making its decisions feel inevitable.' },
+    { kind: 'p', text: 'The trick is not complexity; it’s constraint, rhythm, and revision.' },
+    { kind: 'h2', text: 'A useful constraint' },
+    { kind: 'p', text: 'When you remove options, the remaining choices gain weight.' },
+    { kind: 'p', text: `If you want a nearby thread, continue here: ${relatedLink}` },
   ];
 }
 
 function makeDemoPosts(): DemoPost[] {
-  const out: DemoPost[] = [];
-  const baseIso = "2026-02-05";
+  const baseIso = '2026-02-05';
 
+  type Planned = {
+    i: number;
+    topic: (typeof TOPICS)[number];
+    title: string;
+    baseSlug: string;
+    dateIso: string;
+    coverSrc: string;
+    coverAlt: string;
+    tags: DemoTag[];
+  };
+
+  const planned: Planned[] = [];
   let globalIndex = 0;
 
   for (let i = 0; i < 10; i++) {
     for (const topic of TOPICS) {
       const title = TOPIC_TITLES[topic.slug][i];
-      const slug = `${topic.slug}-${slugify(title)}`;
+      const baseSlug = slugify(title);
       const dateIso = isoFromUtc(baseIso, globalIndex);
 
-      const coverSrc = DEMO_COVER_POOL[globalIndex % DEMO_COVER_POOL.length] ?? "/demo/cover.jpg";
+      const coverSrc = DEMO_COVER_POOL[globalIndex % DEMO_COVER_POOL.length] ?? '/demo/cover.jpg';
       const coverAlt = topic.coverAlt;
-
-      const nextTitle = TOPIC_TITLES[topic.slug][(i + 1) % 10];
-      const relatedSlug = `${topic.slug}-${slugify(nextTitle)}`;
-      const relatedLink = `/blog/${relatedSlug}`;
 
       const baseTags = pick3Tags(topic.slug, i);
 
       let tags = globalIndex < 10 ? withVideoTag(baseTags) : baseTags;
-      if (globalIndex < 20) tags = withLuckyTag(tags);
+      if (globalIndex < 20) {
+        tags = withLuckyTag(tags);
+      }
 
-      out.push({
-        slug,
-        authorName: "Ozge",
-        dateIso,
-        categoryLabel: topic.label,
-        topicSlug: topic.slug,
-        title,
-        summary: makeSummary(topic.label),
-        coverSrc,
-        coverAlt,
-        tags,
-        body: makeBody(relatedLink),
-      });
-
+      planned.push({ i, topic, title, baseSlug, dateIso, coverSrc, coverAlt, tags });
       globalIndex++;
     }
+  }
+
+  // Ensure globally-unique slugs without encoding topic into the URL.
+  const counts = new Map<string, number>();
+  const slugByTopicIndex = new Map<string, string>();
+
+  for (const p of planned) {
+    const n = (counts.get(p.baseSlug) ?? 0) + 1;
+    counts.set(p.baseSlug, n);
+
+    const slug = n === 1 ? p.baseSlug : `${p.baseSlug}-${n}`;
+    slugByTopicIndex.set(`${p.topic.slug}|${p.i}`, slug);
+  }
+
+  const out: DemoPost[] = [];
+
+  for (const p of planned) {
+    const slug = slugByTopicIndex.get(`${p.topic.slug}|${p.i}`) ?? p.baseSlug;
+
+    const nextIndex = (p.i + 1) % 10;
+    const relatedSlug =
+      slugByTopicIndex.get(`${p.topic.slug}|${nextIndex}`) ?? slugify(TOPIC_TITLES[p.topic.slug][nextIndex]);
+    const relatedLink = `/blog/${relatedSlug}`;
+
+    out.push({
+      slug,
+      authorName: 'Ozge',
+      dateIso: p.dateIso,
+      categoryLabel: p.topic.label,
+      topicSlug: p.topic.slug,
+      title: p.title,
+      summary: makeSummary(p.topic.label),
+      coverSrc: p.coverSrc,
+      coverAlt: p.coverAlt,
+      tags: p.tags,
+      body: makeBody(relatedLink),
+    });
   }
 
   return out;
@@ -410,22 +387,34 @@ export function getDemoPostBySlug(slug: string): DemoPost | undefined {
   return DEMO_POSTS.find((p) => p.slug === slug);
 }
 
-export function getDemoTags(): DemoTag[] {
-  const map = new Map<string, DemoTag>();
+export function getDemoCanonicalSlugForLegacySlug(legacySlug: string): string | undefined {
+  // Legacy pattern: `${topicSlug}-${slugify(title)}`
+  // We intentionally avoid embedding topic in the canonical URL now.
   for (const p of DEMO_POSTS) {
-    for (const t of p.tags) map.set(t.slug, t);
+    const legacy = `${p.topicSlug}-${slugify(p.title)}`;
+    if (legacy === legacySlug) return p.slug;
   }
-  return Array.from(map.values()).sort((a, b) => a.slug.localeCompare(b.slug));
+  return undefined;
 }
 
-export function getDemoTopics(): Array<{ slug: string; label: string }> {
-  return TOPICS.map((t) => ({ slug: t.slug, label: t.label }));
+export function getDemoPostsByTopic(topicSlug: string): DemoPost[] {
+  return DEMO_POSTS.filter((p) => p.topicSlug === topicSlug);
 }
 
 export function getDemoPostsByTag(tagSlug: string): DemoPost[] {
   return DEMO_POSTS.filter((p) => p.tags.some((t) => t.slug === tagSlug));
 }
 
-export function getDemoPostsByTopic(topicSlug: string): DemoPost[] {
-  return DEMO_POSTS.filter((p) => p.topicSlug === topicSlug);
+export function getDemoTopics(): Array<{ label: string; slug: string }> {
+  return TOPICS.map((t) => ({ label: t.label, slug: t.slug }));
+}
+
+export function getDemoTags(): DemoTag[] {
+  const map = new Map<string, DemoTag>();
+  for (const p of DEMO_POSTS) {
+    for (const t of p.tags) {
+      map.set(t.slug, t);
+    }
+  }
+  return [...map.values()].sort((a, b) => a.label.localeCompare(b.label));
 }

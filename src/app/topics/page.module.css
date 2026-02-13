@@ -1,6 +1,11 @@
 /* Topics (Listing) */
 
 .page {
+  --topics-content-max: calc(var(--prose-max) + var(--space-20));
+  --topics-grid-min-col-lg: calc(var(--space-20) * 4);
+  --topics-arrow-shift-x: calc(var(--space-4) * -1);
+  --topics-card-lift-y: calc(var(--space-2) * -1);
+
   background: var(--bg-app);
   color: var(--text-body);
 }
@@ -9,7 +14,7 @@
   padding-top: var(--space-16);
   padding-bottom: var(--space-12);
   text-align: center;
-  max-width: calc(var(--prose-max) + var(--space-20));
+  max-width: var(--topics-content-max);
   margin: 0 auto;
 }
 
@@ -52,7 +57,7 @@
   display: grid;
   grid-template-columns: repeat(
     auto-fit,
-    minmax(min(100%, calc(var(--space-20) * 4)), 1fr)
+    minmax(min(100%, var(--topics-grid-min-col-lg)), 1fr)
   );
   gap: var(--space-6);
   align-items: start;
@@ -73,7 +78,7 @@
 
 .featureItem {
   width: 100%;
-  max-width: calc(var(--prose-max) + var(--space-20));
+  max-width: var(--topics-content-max);
   min-width: 0;
 }
 
@@ -149,12 +154,12 @@
   color: var(--accent);
   font-size: var(--text-24);
   opacity: 0;
-  transform: translateX(calc(var(--space-4) * -1));
+  transform: translateX(var(--topics-arrow-shift-x));
   transition: opacity var(--transition-standard), transform var(--transition-standard);
 }
 
 .card:hover {
-  transform: translateY(calc(var(--space-2) * -1));
+  transform: translateY(var(--topics-card-lift-y));
   box-shadow: var(--shadow-xl);
 }
 

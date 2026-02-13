@@ -13,7 +13,9 @@ type LegalPageProps = {
 function formatUpdatedAt(dateIso: string): string {
   const date = new Date(dateIso);
 
-  if (Number.isNaN(date.getTime())) return dateIso;
+  if (Number.isNaN(date.getTime())) {
+    return dateIso;
+  }
 
   return new Intl.DateTimeFormat('en-US', {
     year: 'numeric',

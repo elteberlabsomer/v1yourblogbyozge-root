@@ -1,21 +1,21 @@
-import { notFound } from "next/navigation";
+import { notFound } from 'next/navigation';
 
-import { MainGrid } from "@/components/main-grid/MainGrid";
-import { TopicSpotlight, type TopicSpotlightPost } from "@/components/tag-spotlight/TagSpotlight";
+import { MainGrid } from '@/components/main-grid/MainGrid';
+import { TopicSpotlight, type TopicSpotlightPost } from '@/components/tag-spotlight/TagSpotlight';
 
 import {
   getTagBySlug,
   listPostsByTagSlug,
   listPostsByTopicSlug,
   listTopics,
-} from "@/lib/content/queries";
+} from '@/lib/content/queries';
 
-import styles from "./page.module.css";
+import styles from './page.module.css';
 
-const TAG_SLUG = "are-you-lucky";
+const TAG_SLUG = 'are-you-lucky';
 
 function toText(v: unknown) {
-  return typeof v === "string" ? v.trim() : "";
+  return typeof v === 'string' ? v.trim() : '';
 }
 
 function hashSeed(input: string): number {
@@ -38,7 +38,9 @@ function mulberry32(seed: number) {
 }
 
 function pickRandom<T>(items: T[], count: number, seed: number): T[] {
-  if (items.length === 0) return [];
+  if (items.length === 0) {
+    return [];
+  }
   const rand = mulberry32(seed);
   const copy = [...items];
 
@@ -54,7 +56,9 @@ function pickRandom<T>(items: T[], count: number, seed: number): T[] {
 
 export default async function AreYouLuckyTagPage() {
   const tag = await getTagBySlug(TAG_SLUG);
-  if (!tag) notFound();
+  if (!tag) {
+    notFound();
+  }
 
   const allTagPosts = await listPostsByTagSlug(TAG_SLUG);
   const gridPosts = allTagPosts.slice(0, 15);
@@ -75,7 +79,7 @@ export default async function AreYouLuckyTagPage() {
       }));
 
       return { topicSlug: t.slug, topicLabel: t.label, posts: mapped };
-    })
+    }),
   );
 
   return (

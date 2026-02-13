@@ -1,8 +1,8 @@
 // TagSpotlight.tsx
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
-import styles from "./TagSpotlight.module.css";
+import styles from './TagSpotlight.module.css';
 
 export type TagSpotlightPost = {
   slug: string;
@@ -36,12 +36,12 @@ type TopicProps = {
 };
 
 function toText(value: unknown) {
-  return typeof value === "string" ? value.trim() : "";
+  return typeof value === 'string' ? value.trim() : '';
 }
 
 function pickCoverSrc(post: TagSpotlightPost) {
   const v = toText(post.coverSrc);
-  return v.length > 0 ? v : "";
+  return v.length > 0 ? v : '';
 }
 
 function pickCoverAlt(post: TagSpotlightPost) {
@@ -51,13 +51,17 @@ function pickCoverAlt(post: TagSpotlightPost) {
 
 function toHashtag(label: string) {
   const t = label.trim();
-  if (!t) return "#TAG";
+  if (!t) {
+    return '#TAG';
+  }
   return `#${t.toUpperCase()}`;
 }
 
 function toTopicTitle(label: string) {
   const t = label.trim();
-  if (!t) return "TOPIC";
+  if (!t) {
+    return 'TOPIC';
+  }
   return t.toUpperCase();
 }
 
@@ -65,14 +69,16 @@ function BaseSpotlight({ titleHref, titleText, posts, limit = 4, dataAttr }: Bas
   const safePosts = Array.isArray(posts) ? posts : [];
   const featured = safePosts[0];
 
-  if (!featured) return null;
+  if (!featured) {
+    return null;
+  }
 
   const safeLimit = Math.max(2, limit);
   const sideList = safePosts.slice(1, safeLimit);
 
   const featuredCoverSrc = pickCoverSrc(featured);
   const featuredCoverAlt = pickCoverAlt(featured);
-  const fallbackCoverSrc = "/demo/archive/01.jpg";
+  const fallbackCoverSrc = '/demo/archive/01.jpg';
 
   const bgSrc = featuredCoverSrc.length > 0 ? featuredCoverSrc : fallbackCoverSrc;
 

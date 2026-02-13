@@ -1,9 +1,9 @@
-"use client";
+'use client';
 
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
-import styles from "./PostWallSquare.module.css";
+import styles from './PostWallSquare.module.css';
 
 type Badge = {
   label: string;
@@ -37,6 +37,7 @@ export function PostWallSquare({
           className={styles.img}
           sizes="(max-width: 430px) 100vw, (max-width: 1024px) 50vw, 25vw"
           priority={priority}
+          fetchPriority={priority ? 'high' : 'auto'}
         />
 
         <div className={styles.scrim} aria-hidden="true" />

@@ -35,13 +35,19 @@ export function useFocusTrap(
     const focusables = getFocusable();
     const first = focusables[0];
 
-    if (first) first.focus();
+    if (first) {
+      first.focus();
+    }
 
     const onKeyDown = (e: KeyboardEvent) => {
-      if (e.key !== 'Tab') return;
+      if (e.key !== 'Tab') {
+        return;
+      }
 
       const items = getFocusable();
-      if (items.length === 0) return;
+      if (items.length === 0) {
+        return;
+      }
 
       const f = items[0];
       const l = items[items.length - 1];

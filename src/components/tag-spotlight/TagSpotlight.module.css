@@ -5,8 +5,11 @@
   border-radius: var(--radius-md);
   background: var(--text-ink);
 
+  isolation: isolate;
+
   aspect-ratio: 2 / 3;
 
+  --_z-content: 1;
   --tag-accent: var(--accent);
   --_zoom-dur: var(--media-zoom-duration-slow, 1600ms);
   --_zoom-ease: var(--media-zoom-ease);
@@ -80,7 +83,7 @@
 
 .content {
   position: relative;
-  z-index: 2;
+  z-index: var(--_z-content);
   height: 100%;
 
   display: grid;

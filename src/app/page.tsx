@@ -5,7 +5,7 @@ import { QuoteSpotlight } from '@/components/quote-spotlight/QuoteSpotlight';
 import { MainGrid, type MainGridPost } from '@/components/main-grid/MainGrid';
 import { SocialMediaCard } from '@/components/social-media-card/SocialMediaCard';
 import { VideoGrid, type VideoGridPost } from '@/components/video-grid/VideoGrid';
-import { NewsletterSignupDemo } from "@/components/newsletter-signup/NewsletterSignupDemo";
+import { NewsletterSignupDemo } from '@/components/newsletter-signup/NewsletterSignupDemo';
 import { TagSpotlight, type TagSpotlightPost } from '@/components/tag-spotlight/TagSpotlight';
 
 import styles from './page.module.css';
@@ -14,7 +14,9 @@ const AVATAR =
   'https://pbs.twimg.com/profile_images/1967148637877608448/sY1X17Wg_400x400.jpg';
 
 function parseDateIso(dateIso?: string) {
-  if (!dateIso) return 0;
+  if (!dateIso) {
+    return 0;
+  }
   const t = Date.parse(dateIso);
   return Number.isNaN(t) ? 0 : t;
 }

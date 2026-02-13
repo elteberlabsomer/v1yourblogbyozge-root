@@ -31,7 +31,9 @@ export async function POST(req: Request) {
   }
 
   const data = (await req.json().catch(() => null)) as ContactPayload | null;
-  if (!data) return NextResponse.json({ error: 'Invalid JSON.' }, { status: 400 });
+  if (!data) {
+    return NextResponse.json({ error: 'Invalid JSON.' }, { status: 400 });
+  }
 
   const { name, email, message, consent, website, pageUrl, userAgent } = data;
 

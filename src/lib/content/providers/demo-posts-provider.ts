@@ -1,13 +1,15 @@
-import type { ContentProvider } from "@/lib/content/provider";
-import type { Post } from "@/lib/content/types";
-import { DEMO_POSTS, getDemoAllSlugs, getDemoPostBySlug } from "@/lib/demo/demoPosts";
+import type { ContentProvider } from '@/lib/content/provider';
+import type { Post } from '@/lib/content/types';
+import { DEMO_POSTS, getDemoAllSlugs, getDemoPostBySlug } from '@/lib/demo/demoPosts';
 
 function byDateDesc(a: { dateIso: string }, b: { dateIso: string }): number {
   return b.dateIso.localeCompare(a.dateIso);
 }
 
 function mapDemoToPost(demo: ReturnType<typeof getDemoPostBySlug>): Post | null {
-  if (!demo) return null;
+  if (!demo) {
+    return null;
+  }
 
   return {
     slug: demo.slug,

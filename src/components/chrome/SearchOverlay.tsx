@@ -11,7 +11,7 @@ import Link from 'next/link';
 import { useRouter } from 'next/navigation';
 
 import { useFocusTrap } from './useFocusTrap';
-import { DEMO_POSTS } from "@/lib/demo/demoPosts";
+import { DEMO_POSTS } from '@/lib/demo/demoPosts';
 
 type SearchOverlayProps = {
   isOpen: boolean;
@@ -37,7 +37,9 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
 
   const results = useMemo(() => {
     const q = query.trim().toLowerCase();
-    if (!q) return [];
+    if (!q) {
+      return [];
+    }
 
     return DEMO_POSTS
       .filter((post) => post.title.toLowerCase().includes(q))
@@ -59,12 +61,16 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   }, [resetLocal, onClose]);
 
   useEffect(() => {
-    if (isOpen) inputRef.current?.focus();
+    if (isOpen) {
+      inputRef.current?.focus();
+    }
   }, [isOpen]);
 
   useEffect(() => {
     const handleKeyDown = (e: KeyboardEvent) => {
-      if (!isOpen) return;
+      if (!isOpen) {
+        return;
+      }
 
       if (e.key === 'Escape') {
         e.preventDefault();
@@ -101,7 +107,9 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
     router,
   ]);
 
-  if (!isOpen) return null;
+  if (!isOpen) {
+    return null;
+  }
 
   return (
     <>

@@ -25,14 +25,22 @@ function stableHash(input: string) {
 }
 
 function pickStableIndex(seed: string, maxExclusive: number) {
-  if (maxExclusive <= 1) return 0;
+  if (maxExclusive <= 1) {
+    return 0;
+  }
   return stableHash(seed) % maxExclusive;
 }
 
 function scaleClass(scale: QuoteScale) {
-  if (scale === 's1') return styles.scaleS1;
-  if (scale === 's2') return styles.scaleS2;
-  if (scale === 's3') return styles.scaleS3;
+  if (scale === 's1') {
+    return styles.scaleS1;
+  }
+  if (scale === 's2') {
+    return styles.scaleS2;
+  }
+  if (scale === 's3') {
+    return styles.scaleS3;
+  }
   return styles.scaleS4;
 }
 
@@ -50,11 +58,15 @@ export function QuoteSpotlight({ items = QUOTE_SPOTLIGHT_ITEMS }: QuoteSpotlight
   const quoteRef = useRef<HTMLQuoteElement | null>(null);
 
   useEffect(() => {
-    if (!item) return;
+    if (!item) {
+      return;
+    }
 
     const box = quoteBoxRef.current;
     const quote = quoteRef.current;
-    if (!box || !quote) return;
+    if (!box || !quote) {
+      return;
+    }
 
     const scales: QuoteScale[] = ['s1', 's2', 's3', 's4'];
     let frame = 0;
@@ -71,7 +83,9 @@ export function QuoteSpotlight({ items = QUOTE_SPOTLIGHT_ITEMS }: QuoteSpotlight
           const quoteH = quote.scrollHeight;
 
           const fits = quoteH <= boxH;
-          if (fits) return;
+          if (fits) {
+            return;
+          }
 
           if (i < scales.length - 1) {
             tryFit(i + 1);
@@ -91,12 +105,16 @@ export function QuoteSpotlight({ items = QUOTE_SPOTLIGHT_ITEMS }: QuoteSpotlight
     fit();
 
     return () => {
-      if (frame) window.cancelAnimationFrame(frame);
+      if (frame) {
+        window.cancelAnimationFrame(frame);
+      }
       ro.disconnect();
     };
   }, [item]);
 
-  if (!item) return null;
+  if (!item) {
+    return null;
+  }
 
   const ctaLabel = item.ctaLabel ?? 'Why He Said It?';
 

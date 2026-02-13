@@ -609,12 +609,38 @@ min-height: 0;
     }
   }
 
-  @media (max-width: 430px) {
-    .c-chrome-footer__grid {
-      grid-template-columns: 1fr;
-      gap: var(--space-6);
-    }
+@media (max-width: 430px) {
+  .c-chrome-footer__grid {
+    grid-template-columns: 1fr;
+    gap: var(--space-6);
   }
+
+  /* Mobile: show only the brand column */
+  .c-chrome-footer__grid > .c-chrome-footer__column {
+    display: none;
+  }
+
+  /* Mobile: center the remaining column */
+  .c-chrome-footer__brand {
+    align-items: center;
+    text-align: center;
+  }
+
+  /* Mobile: keep the description narrow + centered */
+  .c-chrome-footer__desc {
+    width: 100%;
+    max-width: var(--footer-brand-max-width);
+    margin-left: auto;
+    margin-right: auto;
+  }
+
+  /* Mobile: center the social row container too */
+  .c-chrome-footer__social {
+    margin-left: auto;
+    margin-right: auto;
+  }
+}
+
 
   .c-chrome-footer__brand {
     display: flex;

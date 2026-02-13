@@ -1,21 +1,28 @@
-import type { StaticImageData } from "next/image";
-import Image from "next/image";
-import Link from "next/link";
+import type { Metadata } from 'next';
+import type { StaticImageData } from 'next/image';
+import Image from 'next/image';
+import Link from 'next/link';
 
-import { getDemoTopics, getDemoPostsByTopic } from "@/lib/demo";
+import { getDemoTopics, getDemoPostsByTopic } from '@/lib/demo';
 
-import artCover from "@/lib/demo/topic-covers/art.png";
-import historyCover from "@/lib/demo/topic-covers/history.webp";
-import literatureCover from "@/lib/demo/topic-covers/literature.jpg";
-import musicCover from "@/lib/demo/topic-covers/music.jpg";
-import relationshipsCover from "@/lib/demo/topic-covers/relationships.avif";
-import scienceCover from "@/lib/demo/topic-covers/science.jpg";
-import screenCover from "@/lib/demo/topic-covers/screen.webp";
-import sportsCover from "@/lib/demo/topic-covers/sports.jpg";
-import technologyCover from "@/lib/demo/topic-covers/technology.jpg";
-import trueCrimeCover from "@/lib/demo/topic-covers/true-crime.webp";
+import artCover from '@/lib/demo/topic-covers/art.png';
+import historyCover from '@/lib/demo/topic-covers/history.webp';
+import literatureCover from '@/lib/demo/topic-covers/literature.jpg';
+import musicCover from '@/lib/demo/topic-covers/music.jpg';
+import relationshipsCover from '@/lib/demo/topic-covers/relationships.avif';
+import scienceCover from '@/lib/demo/topic-covers/science.jpg';
+import screenCover from '@/lib/demo/topic-covers/screen.webp';
+import sportsCover from '@/lib/demo/topic-covers/sports.jpg';
+import technologyCover from '@/lib/demo/topic-covers/technology.jpg';
+import trueCrimeCover from '@/lib/demo/topic-covers/true-crime.webp';
 
-import styles from "./page.module.css";
+import styles from './page.module.css';
+
+export const metadata: Metadata = {
+  title: 'Topics',
+  description: 'Browse all topics.',
+  alternates: { canonical: '/topics' },
+};
 
 type TopicCover = string | StaticImageData;
 
@@ -35,17 +42,17 @@ const TOPIC_COVERS: Record<string, StaticImageData> = {
   screen: screenCover,
   sports: sportsCover,
   technology: technologyCover,
-  "true-crime": trueCrimeCover,
+  'true-crime': trueCrimeCover,
 };
 
 function toTitle(value: string) {
   return value
-    .replace(/[-_]+/g, " ")
+    .replace(/[-_]+/g, ' ')
     .trim()
-    .split(" ")
+    .split(' ')
     .filter(Boolean)
     .map((w) => w.slice(0, 1).toUpperCase() + w.slice(1))
-    .join(" ");
+    .join(' ');
 }
 
 export default function TopicsPage() {
@@ -73,8 +80,7 @@ export default function TopicsPage() {
       <div className="l-container">
         <header className={styles.header}>
           <p className={styles.kicker}>Curated Directory</p>
-          
-          
+
         </header>
 
         <ul className={styles.grid}>

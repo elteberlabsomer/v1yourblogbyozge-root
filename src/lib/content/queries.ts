@@ -1,5 +1,5 @@
-import { content } from "@/lib/content";
-import type { ContentRef, Post } from "@/lib/content/types";
+import { content } from '@/lib/content';
+import type { ContentRef, Post } from '@/lib/content/types';
 
 export type TaxonomyItem = ContentRef & { count: number };
 
@@ -17,7 +17,9 @@ export async function listTopics(): Promise<TaxonomyItem[]> {
   const map = new Map<string, TaxonomyItem>();
 
   items.forEach((post) => {
-    if (!post.topic) return;
+    if (!post.topic) {
+      return;
+    }
 
     const slug = normalizeSlug(post.topic.slug);
     const label = post.topic.label;

@@ -37,7 +37,9 @@ const initialState: ChromeState = {
 
 function enforceInvariants(state: ChromeState): ChromeState {
   if (state.overlay !== 'none' || state.inputMode === 'keyboard') {
-    if (state.headerHidden) return { ...state, headerHidden: false };
+    if (state.headerHidden) {
+      return { ...state, headerHidden: false };
+    }
   }
   return state;
 }
@@ -101,7 +103,9 @@ function reducer(state: ChromeState, action: ChromeAction): ChromeState {
     }
 
     case 'HEADER_SHOW': {
-      if (state.headerHidden) next = { ...state, headerHidden: false };
+      if (state.headerHidden) {
+        next = { ...state, headerHidden: false };
+      }
       break;
     }
 
@@ -154,8 +158,12 @@ export function useChromeBehavior() {
         dispatch({ type: 'OPEN_SEARCH' });
       } else if (e.key === 'Escape') {
         const s = stateRef.current;
-        if (s.overlay === 'drawer') dispatch({ type: 'CLOSE_DRAWER' });
-        if (s.overlay === 'search') dispatch({ type: 'CLOSE_SEARCH' });
+        if (s.overlay === 'drawer') {
+          dispatch({ type: 'CLOSE_DRAWER' });
+        }
+        if (s.overlay === 'search') {
+          dispatch({ type: 'CLOSE_SEARCH' });
+        }
       }
     };
 
@@ -188,7 +196,9 @@ export function useChromeBehavior() {
       const y = window.scrollY;
 
       if (y <= TOP_RESET_Y) {
-        if (s.headerHidden) dispatch({ type: 'HEADER_SHOW' });
+        if (s.headerHidden) {
+          dispatch({ type: 'HEADER_SHOW' });
+        }
         scrollDelta.current = 0;
         lastDir.current = 0;
         lastScrollY.current = y;
@@ -209,8 +219,11 @@ export function useChromeBehavior() {
       const delta = y - lastScrollY.current;
 
       let dir: 1 | -1 | 0 = 0;
-      if (delta > 0) dir = 1;
-      else if (delta < 0) dir = -1;
+      if (delta > 0) {
+        dir = 1;
+      } else if (delta < 0) {
+        dir = -1;
+      }
 
       if (dir !== 0 && dir !== lastDir.current) {
         scrollDelta.current = delta;
@@ -220,10 +233,14 @@ export function useChromeBehavior() {
       }
 
       if (scrollDelta.current >= DELTA_THRESHOLD) {
-        if (!s.headerHidden) dispatch({ type: 'HEADER_HIDE' });
+        if (!s.headerHidden) {
+          dispatch({ type: 'HEADER_HIDE' });
+        }
         scrollDelta.current = 0;
       } else if (scrollDelta.current <= -DELTA_THRESHOLD) {
-        if (s.headerHidden) dispatch({ type: 'HEADER_SHOW' });
+        if (s.headerHidden) {
+          dispatch({ type: 'HEADER_SHOW' });
+        }
         scrollDelta.current = 0;
       }
 

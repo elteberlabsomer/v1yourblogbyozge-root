@@ -3,6 +3,13 @@
   overflow: hidden;
   border-radius: var(--radius-sm);
   background: var(--surface-2);
+
+  isolation: isolate;
+
+  --_z-scrim: 1;
+  --_z-media-link: 2;
+  --_z-content: 3;
+  --_z-corner: 4;
 }
 
 .media {
@@ -33,7 +40,7 @@
 .scrim {
   position: absolute;
   inset: 0;
-  z-index: 2;
+  z-index: var(--_z-scrim);
   pointer-events: none;
   background: var(--overlay-fade);
 }
@@ -41,7 +48,7 @@
 .mediaLink {
   position: absolute;
   inset: 0;
-  z-index: 3;
+  z-index: var(--_z-media-link);
   text-decoration: none;
 }
 
@@ -49,7 +56,7 @@
   position: absolute;
   top: var(--space-4);
   right: var(--space-4);
-  z-index: 5;
+  z-index: var(--_z-corner);
 }
 
 .badge {
@@ -79,7 +86,7 @@
   left: 0;
   right: 0;
   inset: auto 0 0 0;
-  z-index: 4;
+  z-index: var(--_z-content);
   padding: var(--space-4);
 }
 

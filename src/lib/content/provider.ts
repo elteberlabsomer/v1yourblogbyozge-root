@@ -1,4 +1,4 @@
-import type { ListPostsOptions, ListPostsResult, Post } from "@/lib/content/types";
+import type { ListPostsOptions, ListPostsResult, Post } from '@/lib/content/types';
 
 export type ContentProvider = {
   listPosts(options?: ListPostsOptions): Promise<ListPostsResult>;

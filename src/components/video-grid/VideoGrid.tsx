@@ -1,7 +1,7 @@
-import Image from "next/image";
-import Link from "next/link";
+import Image from 'next/image';
+import Link from 'next/link';
 
-import styles from "./VideoGrid.module.css";
+import styles from './VideoGrid.module.css';
 
 export type VideoGridPost = {
   slug: string;
@@ -44,8 +44,8 @@ function CategoryLabel({
   return <span className={styles.categoryText}>{categoryLabel}</span>;
 }
 
-function PlayIcon({ size }: { size: "lg" | "sm" }) {
-  const cls = size === "lg" ? styles.playIconLg : styles.playIconSm;
+function PlayIcon({ size }: { size: 'lg' | 'sm' }) {
+  const cls = size === 'lg' ? styles.playIconLg : styles.playIconSm;
 
   return (
     <svg className={cls} viewBox="0 0 24 24" focusable="false" aria-hidden="true">
@@ -66,14 +66,16 @@ export function VideoGrid({ posts, limit = 6 }: VideoGridProps) {
   const safeLimit = Math.max(2, limit);
   const featured = posts[0];
 
-  if (!featured) return null;
+  if (!featured) {
+    return null;
+  }
 
   const sideList = posts.slice(1, safeLimit);
 
   const fallbackCoverSrc =
     featured.coverSrc && featured.coverSrc.length > 0
       ? featured.coverSrc
-      : "/demo/archive/01.jpg";
+      : '/demo/archive/01.jpg';
 
   return (
     <div data-video-grid>

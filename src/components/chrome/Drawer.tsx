@@ -81,17 +81,17 @@ export function Drawer({ isOpen, onClose }: DrawerProps) {
         <div className="c-chrome-drawer__divider" />
 
         <nav className="c-chrome-drawer__section c-chrome-drawer__section--legal" aria-label="Legal">
-         <Link href="/pages/privacy" className="c-chrome-drawer__legalLink" onClick={onClose}>
+          <Link href="/pages/privacy" className="c-chrome-drawer__legalLink" onClick={onClose}>
   Privacy Policy
-</Link>
+          </Link>
 
-<Link href="/pages/cookies" className="c-chrome-drawer__legalLink" onClick={onClose}>
+          <Link href="/pages/cookies" className="c-chrome-drawer__legalLink" onClick={onClose}>
   Cookie Policy
-</Link>
+          </Link>
 
-<Link href="/pages/terms" className="c-chrome-drawer__legalLink" onClick={onClose}>
+          <Link href="/pages/terms" className="c-chrome-drawer__legalLink" onClick={onClose}>
   Terms & Conditions
-</Link>
+          </Link>
 
           <Link href="/pages/about" className="c-chrome-drawer__legalLink" onClick={onClose}>
             About Me

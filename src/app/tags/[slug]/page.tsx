@@ -1,9 +1,10 @@
-import { notFound } from "next/navigation";
+import type { Metadata } from 'next';
+import { notFound } from 'next/navigation';
 
-import { MainGrid } from "@/components/main-grid/MainGrid";
-import { PostWallSquare } from "@/components/post-wall-square/PostWallSquare";
-import { QuoteSpotlight } from "@/components/quote-spotlight/QuoteSpotlight";
-import { TopicSpotlight, type TopicSpotlightPost } from "@/components/tag-spotlight/TagSpotlight";
+import { MainGrid } from '@/components/main-grid/MainGrid';
+import { PostWallSquare } from '@/components/post-wall-square/PostWallSquare';
+import { QuoteSpotlight } from '@/components/quote-spotlight/QuoteSpotlight';
+import { TopicSpotlight, type TopicSpotlightPost } from '@/components/tag-spotlight/TagSpotlight';
 
 import {
   getTagBySlug,
@@ -11,13 +12,57 @@ import {
   listPostsByTopicSlug,
   listTags,
   listTopics,
-} from "@/lib/content/queries";
+} from '@/lib/content/queries';
 
-import styles from "./page.module.css";
+import styles from './page.module.css';
 
 type PageProps = {
   params: Promise<{ slug: string }>;
 };
+
+export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
+  const { slug } = await params;
+
+  const tag = await getTagBySlug(slug);
+  if (!tag) {
+    return {
+      title: 'Not found',
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const title = `Tag: ${tag.label}`;
+  const description = `Posts tagged "${tag.label}".`;
+  const canonicalUrl = `/tags/${tag.slug}`;
+
+  const posts = await listPostsByTagSlug(slug);
+  const first = posts[0] as any;
+
+  const coverSrc = toText(first?.cover?.src);
+  const coverAlt = toText(first?.cover?.alt) || title;
+
+  const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, '');
+  const imageUrl = coverSrc ? new URL(coverSrc, siteUrl).toString() : null;
+
+  return {
+    title,
+    description,
+    alternates: { canonical: canonicalUrl },
+    openGraph: {
+      type: 'website',
+      url: canonicalUrl,
+      title,
+      description,
+      ...(imageUrl ? { images: [{ url: imageUrl, alt: coverAlt }] } : {}),
+    },
+    twitter: {
+      card: 'summary_large_image',
+      title,
+      description,
+      ...(imageUrl ? { images: [imageUrl] } : {}),
+    },
+  };
+}
 
 export async function generateStaticParams() {
   const tags = await listTags();
@@ -25,7 +70,7 @@ export async function generateStaticParams() {
 }
 
 function toText(v: unknown) {
-  return typeof v === "string" ? v.trim() : "";
+  return typeof v === 'string' ? v.trim() : '';
 }
 
 function hashSeed(input: string): number {
@@ -48,7 +93,9 @@ function mulberry32(seed: number) {
 }
 
 function pickRandom<T>(items: T[], count: number, seed: number): T[] {
-  if (items.length === 0) return [];
+  if (items.length === 0) {
+    return [];
+  }
   const rand = mulberry32(seed);
   const copy = [...items];
 
@@ -66,7 +113,9 @@ export default async function TagDetailPage({ params }: PageProps) {
   const { slug } = await params;
 
   const tag = await getTagBySlug(slug);
-  if (!tag) notFound();
+  if (!tag) {
+    notFound();
+  }
 
   const allTagPosts = await listPostsByTagSlug(slug);
   const latest14 = allTagPosts.slice(0, 14);
@@ -89,7 +138,7 @@ export default async function TagDetailPage({ params }: PageProps) {
       }));
 
       return { topicSlug: t.slug, topicLabel: t.label, posts: mapped };
-    })
+    }),
   );
 
   return (
@@ -102,7 +151,7 @@ export default async function TagDetailPage({ params }: PageProps) {
               <PostWallSquare
                 href={`/blog/${post.slug}`}
                 title={post.title}
-                imageSrc={post.cover?.src ?? "/demo/archive/01.jpg"}
+                imageSrc={post.cover?.src ?? '/demo/archive/01.jpg'}
                 imageAlt={post.cover?.alt ?? post.title}
                 badge={{ label: tag.label, href: `/tags/${tag.slug}` }}
                 priority={index === 0}
