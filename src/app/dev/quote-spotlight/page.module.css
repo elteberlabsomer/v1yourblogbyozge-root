@@ -1,0 +1,10 @@
+.root {
+  min-height: 100vh;
+  background: var(--bg-app);
+  padding: var(--space-20) var(--space-5);
+}
+
+.container {
+  max-width: var(--container-max);
+  margin: 0 auto;
+}

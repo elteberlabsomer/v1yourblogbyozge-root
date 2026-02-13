@@ -1,0 +1,255 @@
+/* TagSpotlight.module.css */
+.root {
+  position: relative;
+  overflow: hidden;
+  border-radius: var(--radius-md);
+  background: var(--text-ink);
+
+  aspect-ratio: 2 / 3;
+
+  --tag-accent: var(--accent);
+  --_zoom-dur: var(--media-zoom-duration-slow, 1600ms);
+  --_zoom-ease: var(--media-zoom-ease);
+  --_zoom-scale: var(--media-zoom-scale);
+
+  --_scrim-start: var(--palette-black-a40);
+  --_scrim-mid: var(--palette-black-a60);
+  --_scrim-end: var(--_scrim-mid);
+
+
+  --_divider: var(--palette-white-a18);
+
+  --_text: var(--text-inverse);
+  --_text-soft: var(--palette-white-a98);
+  --_text-soft-opacity: var(--opacity-scrim);
+
+  --_focus-outline: var(--palette-white-a98);
+  --focus-ring-color: var(--_focus-outline);
+
+  --_icon-col: var(--space-4);
+  --_bullet-col: var(--space-3);
+
+  --_dot-size: var(--space-2);
+  --_featured-dot-size: var(--space-3-5);
+  --_pill: var(--radius-pill);
+
+  --_title-size: var(--text-22);
+  --_featured-size: var(--text-32);
+  --_item-size: var(--text-18);
+
+  --_underline-thickness: var(--link-underline-thickness-hover);
+  --_underline-offset: var(--link-underline-offset);
+}
+
+.media {
+  position: absolute;
+  inset: 0;
+}
+
+.img {
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform var(--_zoom-dur) var(--_zoom-ease);
+}
+
+.root:hover .img {
+  transform: scale(var(--_zoom-scale));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img {
+    transition: none;
+  }
+
+  .root:hover .img {
+    transform: none;
+  }
+}
+
+.scrim {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background: linear-gradient(
+    180deg,
+    var(--_scrim-start) 0%,
+    var(--_scrim-mid) 52%,
+    var(--_scrim-end) 100%
+  );
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+  height: 100%;
+
+  display: grid;
+  align-content: start;
+  gap: var(--space-8);
+
+  padding: var(--space-12) var(--space-6) var(--space-8);
+
+  color: var(--_text);
+
+  grid-template-rows: auto auto auto;
+}
+
+.header {
+  display: grid;
+  gap: var(--space-2);
+
+  justify-items: center;
+  text-align: center;
+}
+
+.header::after {
+  content: "";
+  display: block;
+  height: var(--border-1);
+  width: 100%;
+  background: var(--_divider);
+  margin-top: var(--space-4);
+}
+
+.tagTitle {
+  margin: 0;
+  font-family: var(--font-display);
+  font-size: var(--_title-size);
+  line-height: 1.05;
+  font-weight: var(--font-weight-bold);
+  letter-spacing: var(--tracking-wide);
+  text-transform: uppercase;
+
+  width: 100%;
+  text-align: center;
+}
+
+.tagLink {
+  color: var(--tag-accent);
+  text-decoration: none;
+  display: inline-block;
+}
+
+.tagLink:visited {
+  color: var(--tag-accent);
+}
+
+.tagLink:hover {
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: var(--_underline-thickness);
+  text-underline-offset: var(--_underline-offset);
+}
+
+.tagIntro {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-13);
+  line-height: 1.4;
+  color: var(--_text-soft);
+  opacity: var(--_text-soft-opacity);
+}
+
+.featuredBlock {
+  display: grid;
+  gap: var(--space-3);
+}
+
+.featuredRow {
+  display: grid;
+  grid-template-columns: var(--_icon-col) minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.featuredDot {
+  width: var(--_featured-dot-size);
+  height: var(--_featured-dot-size);
+  border-radius: var(--_pill);
+  background: var(--tag-accent);
+  margin-top: var(--space-2);
+}
+
+.featuredTitle {
+  margin: 0;
+
+  font-family: var(--font-display);
+
+  font-size: var(--_featured-size);
+  line-height: 1.15;
+  font-weight: var(--font-weight-bold);
+  text-shadow: var(--shadow-text-on-media);
+}
+
+.featuredLink {
+  color: var(--_text);
+  text-decoration: none;
+}
+
+.featuredLink:visited {
+  color: var(--_text);
+}
+
+.featuredLink:hover {
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: var(--_underline-thickness);
+  text-underline-offset: var(--_underline-offset);
+}
+
+.list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: grid;
+  gap: var(--space-5);
+  align-content: start;
+}
+
+.item {
+  display: grid;
+  grid-template-columns: var(--_bullet-col) minmax(0, 1fr);
+  gap: var(--space-3);
+  align-items: start;
+}
+
+.dot {
+  width: var(--_dot-size);
+  height: var(--_dot-size);
+  border-radius: var(--_pill);
+  background: var(--tag-accent);
+  margin-top: var(--space-1);
+}
+
+.itemLink {
+  color: var(--_text);
+  text-decoration: none;
+
+  font-family: var(--font-display);
+
+  font-size: var(--_item-size);
+  line-height: 1.35;
+  font-weight: var(--font-weight-semibold);
+
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  overflow: hidden;
+}
+
+.itemLink:visited {
+  color: var(--_text);
+}
+
+.itemLink:hover {
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: var(--_underline-thickness);
+  text-underline-offset: var(--_underline-offset);
+}
+
+/* If a "compact" class is applied anywhere, it must NOT change aspect ratio. */
+.compact {
+  aspect-ratio: 2 / 3;
+}

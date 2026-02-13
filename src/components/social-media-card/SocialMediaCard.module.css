@@ -1,0 +1,207 @@
+.card {
+  min-height: calc(
+    var(--space-20) + var(--space-16) + var(--space-16) + var(--space-3)
+  );
+  border-radius: calc(var(--radius-xl) + var(--radius-xl));
+  padding: var(--space-10);
+
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+
+  position: relative;
+  overflow: hidden;
+  isolation: isolate;
+
+  cursor: pointer;
+  text-decoration: none;
+
+  transition: transform var(--transition-slow), box-shadow var(--transition-slow);
+}
+
+.card,
+.card:visited,
+.card:hover,
+.card:active {
+  color: var(--text-inverse);
+  text-decoration: none;
+}
+
+.card:hover {
+  transform: translateY(calc(var(--space-2) - var(--space-4)));
+  box-shadow: var(--shadow-xl);
+}
+
+.twitterCard {
+  background: linear-gradient(
+    135deg,
+    var(--social-twitter-card-start) 0%,
+    var(--social-twitter-card-end) 100%
+  );
+  color: var(--text-inverse);
+}
+
+.redditCard {
+  background: linear-gradient(
+    135deg,
+    var(--social-reddit-card-start) 0%,
+    var(--social-reddit-card-end) 100%
+  );
+  color: var(--text-inverse);
+}
+
+.card::before {
+  content: "";
+  position: absolute;
+
+  width: calc(
+    var(--space-20) + var(--space-20) + var(--space-20) + var(--space-12) +
+      var(--space-3)
+  );
+  height: calc(
+    var(--space-20) + var(--space-20) + var(--space-20) + var(--space-12) +
+      var(--space-3)
+  );
+
+  border-radius: var(--radius-pill);
+  opacity: 0.1;
+  background: var(--text-inverse);
+
+  z-index: 0;
+  pointer-events: none;
+}
+
+.twitterCard::before {
+  top: calc(var(--space-0) - (var(--space-20) + var(--space-5)));
+  right: calc(var(--space-0) - (var(--space-20) + var(--space-5)));
+}
+
+.redditCard::before {
+  bottom: calc(var(--space-0) - (var(--space-20) + var(--space-5)));
+  left: calc(var(--space-0) - (var(--space-20) + var(--space-5)));
+}
+
+.card::after {
+  content: "";
+  position: absolute;
+
+  width: calc(var(--space-20) + var(--space-20) + var(--space-10));
+  height: calc(var(--space-20) + var(--space-20) + var(--space-10));
+
+  background: var(--palette-white-a05);
+  transform: rotate(45deg);
+
+  z-index: 0;
+  pointer-events: none;
+}
+
+.twitterCard::after {
+  top: calc(var(--space-0) - var(--space-12-5));
+  left: calc(var(--space-0) - var(--space-12-5));
+}
+
+.redditCard::after {
+  bottom: calc(var(--space-0) - var(--space-12-5));
+  right: calc(var(--space-0) - var(--space-12-5));
+}
+
+.header {
+  display: flex;
+  align-items: center;
+  gap: var(--space-4);
+
+  position: relative;
+  z-index: 1;
+}
+
+.avatar {
+  width: var(--space-16);
+  height: var(--space-16);
+  border-radius: var(--radius-pill);
+
+  border: calc(var(--border-width-1) + var(--border-width-2)) solid
+    var(--palette-white-a30);
+  background: var(--palette-white-a10);
+
+  object-fit: cover;
+}
+
+.info {
+  display: flex;
+  flex-direction: column;
+  min-width: 0;
+}
+
+.handle {
+  margin: 0 0 var(--space-1) 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-24);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.15;
+  color: var(--text-inverse);
+}
+
+.subtitle {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: var(--text-14);
+  line-height: var(--leading-normal);
+  color: var(--palette-white-a80);
+}
+
+.footer {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  position: relative;
+  z-index: 1;
+}
+
+.platformLogo {
+  font-size: var(--text-48);
+  opacity: 0.9;
+  line-height: 1;
+
+  display: inline-flex;
+  align-items: center;
+
+  color: var(--text-inverse);
+}
+
+.followBtn {
+  padding: var(--space-3) var(--space-7);
+  background: var(--text-inverse);
+  border-radius: var(--radius-xl);
+
+  font-family: var(--font-ui);
+  font-weight: var(--font-weight-semibold);
+  font-size: var(--text-14);
+
+  transition: transform var(--transition-slow), box-shadow var(--transition-slow);
+}
+
+.twitterCard .followBtn {
+  color: var(--social-twitter-card-start);
+}
+
+.redditCard .followBtn {
+  color: var(--social-reddit-card-start);
+}
+
+.followBtn:hover {
+  transform: scale(1.05);
+  box-shadow: var(--shadow-sm);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .card,
+  .followBtn {
+    transition: none;
+  }
+
+  .card:hover,
+  .followBtn:hover {
+    transform: none;
+  }
+}

@@ -1,0 +1,177 @@
+.banner {
+  background: var(--surface-1);
+  padding: var(--space-20) calc(var(--space-20) + var(--space-5));
+  position: relative;
+}
+
+.content {
+  position: relative;
+  z-index: 2;
+
+  display: grid;
+  grid-template-columns: calc(var(--space-20) + var(--space-20) + var(--space-10)) 1fr;
+  gap: calc(var(--space-12) + var(--space-3));
+  align-items: start;
+}
+
+.authorCol {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: var(--space-5);
+}
+
+.avatarWrap {
+  width: calc(var(--space-20) + var(--space-10) + var(--space-5));
+  height: calc(var(--space-20) + var(--space-10) + var(--space-5));
+  border-radius: var(--radius-pill);
+  overflow: hidden;
+
+  border: calc(var(--border-width-1) + var(--border-width-2)) solid var(--border-faint);
+  flex-shrink: 0;
+}
+
+.avatar {
+  width: 100%;
+  height: 100%;
+  display: block;
+  object-fit: cover;
+}
+
+.authorName {
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  font-size: var(--text-18);
+  line-height: var(--leading-snug);
+  color: var(--text-ink);
+  text-align: center;
+}
+
+/* Right column layout ensures CTA never gets pushed out. */
+.rightCol {
+  display: grid;
+  grid-template-rows: 1fr auto;
+  gap: var(--space-10);
+  min-width: 0;
+  position: relative;
+}
+
+/* The box we fit text into (no truncation, we resize text instead). */
+.quoteBox {
+  min-width: 0;
+  min-height: 0;
+}
+
+/* Text: ONLY small quotes (open + close). No big decorative quotes. */
+.quoteText {
+  margin: 0;
+  text-align: left;
+
+  position: relative;
+  z-index: 1;
+
+  padding-left: var(--space-10);
+  padding-right: calc(var(--space-20) + var(--space-8));
+
+  font-family: var(--font-display);
+  font-weight: var(--font-weight-bold);
+  line-height: 1.35;
+  color: var(--text-ink);
+}
+
+.quoteText::before {
+  content: "“";
+  margin-right: 0.18em;
+  color: var(--accent);
+  opacity: 0.55;
+}
+
+.quoteText::after {
+  content: "”";
+  margin-left: 0.18em;
+  color: var(--accent);
+  opacity: 0.55;
+}
+
+.footer {
+  display: flex;
+  justify-content: flex-end;
+
+  position: relative;
+  z-index: 1;
+}
+
+.cta {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+
+  padding: var(--space-3-5) var(--space-7);
+
+  background: var(--accent);
+  color: var(--text-inverse);
+
+  text-decoration: none;
+
+  font-family: var(--font-display);
+  font-size: var(--text-14);
+  font-weight: var(--font-weight-bold);
+
+  border-radius: var(--radius-md);
+  border: var(--border-width-2) solid var(--accent);
+
+  transition: background var(--transition-standard), color var(--transition-standard),
+    transform var(--transition-standard);
+}
+
+.cta:visited {
+  color: var(--text-inverse);
+  text-decoration: none;
+}
+
+.cta:hover {
+  background: var(--surface-1);
+  color: var(--accent);
+  transform: translateY(calc(var(--space-0) - var(--space-1)));
+}
+
+.ctaLabel {
+  display: inline-block;
+}
+
+.ctaIcon {
+  font-size: var(--text-16);
+  line-height: 1;
+}
+
+/* Font scale steps (largest -> smallest). */
+.scaleS1 .quoteText {
+  font-size: var(--text-36);
+}
+
+.scaleS2 .quoteText {
+  font-size: var(--text-32);
+}
+
+.scaleS3 .quoteText {
+  font-size: var(--text-28);
+}
+
+.scaleS4 .quoteText {
+  font-size: var(--text-24);
+}
+
+/* If even the smallest scale doesn't fit, allow the card to grow (still no truncation). */
+.allowGrow .rightCol {
+  grid-template-rows: auto auto;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cta {
+    transition: none;
+  }
+
+  .cta:hover {
+    transform: none;
+  }
+}

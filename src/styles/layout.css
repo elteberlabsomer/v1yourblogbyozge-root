@@ -1,0 +1,84 @@
+@layer layout {
+  /* =========================================================
+     Layout primitives
+     ========================================================= */
+
+  .l-section {
+    width: 100%;
+    padding: var(--page-pad-y-mobile) 0;
+  }
+
+  .l-container {
+    width: 100%;
+    max-width: var(--container-max);
+    margin: 0 auto;
+    padding-left: var(--page-pad-x-mobile);
+    padding-right: var(--page-pad-x-mobile);
+  }
+
+  .l-prose {
+    width: 100%;
+    max-width: var(--prose-max);
+    margin: 0 auto;
+  }
+
+  .l-stack {
+    display: flex;
+    flex-direction: column;
+    gap: var(--section-gap);
+  }
+
+  .l-grid {
+    display: grid;
+    gap: var(--section-gap);
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .l-two-column {
+    display: grid;
+    gap: var(--section-gap);
+    grid-template-columns: minmax(0, 1fr);
+    align-items: start;
+    grid-auto-columns: minmax(0, 1fr);
+  }
+
+   
+  @media (min-width: 431px) and (max-width: 1024px) {
+    .l-section {
+      padding: var(--page-pad-y-tablet) 0;
+    }
+
+    .l-container {
+      padding-left: var(--page-pad-x-tablet);
+      padding-right: var(--page-pad-x-tablet);
+    }
+
+    .l-grid {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+    }
+
+    .l-two-column {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+
+   
+  @media (min-width: 1025px) {
+    .l-section {
+      padding: var(--page-pad-y-desktop) 0;
+    }
+
+    .l-container {
+      padding-left: var(--page-pad-x-desktop);
+      padding-right: var(--page-pad-x-desktop);
+    }
+
+    .l-grid {
+      grid-template-columns: repeat(3, minmax(0, 1fr));
+    }
+
+    .l-two-column {
+      grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    }
+  }
+}

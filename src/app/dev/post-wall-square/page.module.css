@@ -1,0 +1,42 @@
+.page {
+  padding: 0;
+  margin: 0;
+}
+
+.hero {
+  width: 100%;
+  padding: 0;
+  margin: 0;
+}
+
+.tiles {
+  width: 100%;
+  display: grid;
+  gap: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.tile {
+  min-width: 0;
+}
+
+/* Mobile: 0–430 */
+@media (max-width: 430px) {
+  .tiles {
+    grid-template-columns: 1fr;
+  }
+}
+
+/* Tablet: 431–768 */
+@media (min-width: 431px) and (max-width: 1024px){
+  .tiles {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+/* Desktop: 769+ */
+@media (min-width: 769px) {
+  .tiles {
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+  }
+}
