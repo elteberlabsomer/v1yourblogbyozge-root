@@ -12,6 +12,7 @@ import {
   listPostsByTopicSlug,
   listTopics,
 } from '@/lib/content/queries';
+import { directusAssetUrl } from '@/lib/directus/asset-url';
 
 import styles from './page.module.css';
 
@@ -164,7 +165,7 @@ export default async function TopicDetailPage({ params }: PageProps) {
       const mapped: TagSpotlightPost[] = posts.slice(0, 4).map((p) => ({
         slug: p.slug,
         title: p.title,
-        coverSrc: p.cover?.src ?? null,
+        coverSrc: directusAssetUrl(p.cover?.src ?? null, { key: 'portrait' }) || null,
         coverAlt: p.cover?.alt ?? null,
       }));
 
@@ -182,7 +183,7 @@ export default async function TopicDetailPage({ params }: PageProps) {
               <PostWallSquare
                 href={`/blog/${post.slug}`}
                 title={post.title}
-                imageSrc={pickCoverSrc(post)}
+                imageSrc={directusAssetUrl(pickCoverSrc(post), { key: 'square' })}
                 imageAlt={pickCoverAlt(post)}
                 priority={index === 0}
                 badge={{ label: topic.label, href: `/topics/${slug}` }}

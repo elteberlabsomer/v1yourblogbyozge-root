@@ -3,7 +3,7 @@ import type { StaticImageData } from 'next/image';
 import Image from 'next/image';
 import Link from 'next/link';
 
-import { getDemoTopics, getDemoPostsByTopic } from '@/lib/demo';
+import { listTopics } from '@/lib/content/queries';
 
 import artCover from '@/lib/demo/topic-covers/art.png';
 import historyCover from '@/lib/demo/topic-covers/history.webp';
@@ -55,20 +55,16 @@ function toTitle(value: string) {
     .join(' ');
 }
 
-export default function TopicsPage() {
-  const topics = getDemoTopics();
+export default async function TopicsPage() {
+  const topics = await listTopics();
 
   const cards: TopicCard[] = topics.slice(0, 10).map((t) => {
-    const posts = getDemoPostsByTopic(t.slug);
-    const hero = posts[0];
-
     const coverFromTopic = TOPIC_COVERS[t.slug] ?? null;
-    const coverFallbackFromPost = hero?.coverSrc ?? null;
 
     return {
       slug: t.slug,
       label: t.label ?? toTitle(t.slug),
-      cover: coverFromTopic ?? coverFallbackFromPost,
+      cover: coverFromTopic,
     };
   });
 

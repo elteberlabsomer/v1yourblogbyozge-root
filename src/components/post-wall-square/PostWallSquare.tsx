@@ -3,6 +3,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { directusAssetUrl } from '@/lib/directus/asset-url';
+
 import styles from './PostWallSquare.module.css';
 
 type Badge = {
@@ -27,11 +29,13 @@ export function PostWallSquare({
   badge,
   priority = false,
 }: PostWallSquareProps) {
+  const src = directusAssetUrl(imageSrc, { key: 'square' });
+
   return (
     <article className={styles.root}>
       <div className={styles.media}>
         <Image
-          src={imageSrc}
+          src={src}
           alt={imageAlt ?? title}
           fill
           className={styles.img}

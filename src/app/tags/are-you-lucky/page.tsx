@@ -9,6 +9,7 @@ import {
   listPostsByTopicSlug,
   listTopics,
 } from '@/lib/content/queries';
+import { directusAssetUrl } from '@/lib/directus/asset-url';
 
 import styles from './page.module.css';
 
@@ -74,7 +75,7 @@ export default async function AreYouLuckyTagPage() {
       const mapped: TopicSpotlightPost[] = posts.slice(0, 4).map((p) => ({
         slug: p.slug,
         title: p.title,
-        coverSrc: toText(p.cover?.src) || null,
+        coverSrc: directusAssetUrl(toText(p.cover?.src), { key: 'portrait' }) || null,
         coverAlt: toText(p.cover?.alt) || null,
       }));
 

@@ -2,6 +2,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { directusAssetUrl } from '@/lib/directus/asset-url';
+
 import styles from './TagSpotlight.module.css';
 
 export type TagSpotlightPost = {
@@ -80,7 +82,8 @@ function BaseSpotlight({ titleHref, titleText, posts, limit = 4, dataAttr }: Bas
   const featuredCoverAlt = pickCoverAlt(featured);
   const fallbackCoverSrc = '/demo/archive/01.jpg';
 
-  const bgSrc = featuredCoverSrc.length > 0 ? featuredCoverSrc : fallbackCoverSrc;
+  const rawBgSrc = featuredCoverSrc.length > 0 ? featuredCoverSrc : fallbackCoverSrc;
+  const bgSrc = directusAssetUrl(rawBgSrc, { key: 'portrait' });
 
   return (
     <article className={styles.root} data-spotlight={dataAttr}>

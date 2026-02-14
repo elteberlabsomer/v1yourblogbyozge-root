@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { directusAssetUrl } from '@/lib/directus/asset-url';
+
 import styles from './PostGrid.module.css';
 
 type CoverLike = { src?: string | null; alt?: string | null };
@@ -105,7 +107,7 @@ export function PostGrid({
   return (
     <ul className={rootClassName} aria-label={ariaLabel}>
       {safePosts.map((post) => {
-        const coverSrc = pickCoverSrc(post);
+        const coverSrc = directusAssetUrl(pickCoverSrc(post), { key: 'thumb' });
         const coverAlt = pickCoverAlt(post);
         const category = pickCategory(post);
         const categoryHref = pickCategoryHref(post);

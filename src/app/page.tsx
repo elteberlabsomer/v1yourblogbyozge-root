@@ -1,4 +1,5 @@
-import { DEMO_POSTS, getDemoPostsByTag } from '@/lib/demo';
+import { content } from '@/lib/content';
+import type { Post } from '@/lib/content/types';
 
 import { PostWallSquare } from '@/components/post-wall-square/PostWallSquare';
 import { QuoteSpotlight } from '@/components/quote-spotlight/QuoteSpotlight';
@@ -25,58 +26,55 @@ function byDateDesc(a: { dateIso?: string }, b: { dateIso?: string }) {
   return parseDateIso(b.dateIso) - parseDateIso(a.dateIso);
 }
 
-function mapDemoToMainGridPost(p: (typeof DEMO_POSTS)[number]): MainGridPost {
+function mapPostToMainGridPost(p: Post): MainGridPost {
   return {
     slug: p.slug,
     title: p.title,
-    categoryLabel: p.categoryLabel,
-    topicSlug: p.topicSlug,
-    coverSrc: p.coverSrc,
-    coverAlt: p.coverAlt,
+    topic: p.topic ? { slug: p.topic.slug, label: p.topic.label } : null,
+    cover: p.cover ? { src: p.cover.src, alt: p.cover.alt } : null,
   };
 }
 
-function mapDemoToVideoGridPost(p: (typeof DEMO_POSTS)[number]): VideoGridPost {
+function mapPostToVideoGridPost(p: Post): VideoGridPost {
   return {
     slug: p.slug,
     title: p.title,
     dateIso: p.dateIso,
-    coverSrc: p.coverSrc,
-    coverAlt: p.coverAlt,
-    categoryLabel: p.categoryLabel,
-    topicSlug: p.topicSlug,
+    coverSrc: p.cover?.src ?? '',
+    coverAlt: p.cover?.alt ?? p.title,
+    categoryLabel: p.topic?.label ?? '',
+    topicSlug: p.topic?.slug ?? null,
   };
 }
 
-function toSpotlightPosts(
-  raw: Array<{
-    slug: string;
-    title: string;
-    coverSrc?: string;
-    coverAlt?: string;
-    dateIso?: string;
-  }>,
-) {
+function toSpotlightPosts(raw: Post[]) {
   const posts: TagSpotlightPost[] = [...raw]
     .sort(byDateDesc)
     .map((p) => ({
       slug: p.slug,
       title: p.title,
-      coverSrc: p.coverSrc,
-      coverAlt: p.coverAlt,
+      coverSrc: p.cover?.src ?? '',
+      coverAlt: p.cover?.alt ?? p.title,
     }));
 
   return posts;
 }
 
-export default function HomePage() {
-  const latest14 = [...DEMO_POSTS].sort(byDateDesc).slice(0, 14);
+function hasTag(post: Post, tagSlug: string) {
+  const tags = Array.isArray(post.tags) ? post.tags : [];
+  return tags.some((t) => t.slug === tagSlug);
+}
+
+export default async function HomePage() {
+  const { items } = await content.listPosts({ limit: 120 });
+
+  const latest14 = items.slice(0, 14);
   const heroPosts = latest14.slice(0, 4);
   const gridPosts = latest14.slice(4, 14);
 
-  const videosRaw = getDemoPostsByTag('videos');
-  const commRaw = getDemoPostsByTag('communication');
-  const sourcesRaw = getDemoPostsByTag('sources');
+  const videosRaw = items.filter((p) => hasTag(p, 'videos'));
+  const commRaw = items.filter((p) => hasTag(p, 'communication'));
+  const sourcesRaw = items.filter((p) => hasTag(p, 'sources'));
 
   const tagCards: Array<{
     tagSlug: string;
@@ -88,7 +86,9 @@ export default function HomePage() {
     { tagSlug: 'sources', tagLabel: 'sources', posts: toSpotlightPosts(sourcesRaw) },
   ];
 
-  const videoPosts = [...videosRaw].sort(byDateDesc).map(mapDemoToVideoGridPost);
+  const videoPosts = [...videosRaw].sort(byDateDesc).map(mapPostToVideoGridPost);
+
+  const heroFallback = '/demo/archive/01.jpg';
 
   return (
     <main className={styles.page}>
@@ -97,17 +97,20 @@ export default function HomePage() {
         <div className={styles.tiles} aria-label="Hero tiles">
           {heroPosts.map((post, index) => {
             const badge =
-              post.categoryLabel && post.topicSlug
-                ? { label: post.categoryLabel, href: `/topics/${post.topicSlug}` }
+              post.topic?.label && post.topic?.slug
+                ? { label: post.topic.label, href: `/topics/${post.topic.slug}` }
                 : undefined;
+
+            const imageSrc = post.cover?.src && post.cover.src.length > 0 ? post.cover.src : heroFallback;
+            const imageAlt = post.cover?.alt && post.cover.alt.length > 0 ? post.cover.alt : post.title;
 
             return (
               <div key={post.slug} className={styles.tile}>
                 <PostWallSquare
                   href={`/blog/${post.slug}`}
                   title={post.title}
-                  imageSrc={post.coverSrc}
-                  imageAlt={post.coverAlt}
+                  imageSrc={imageSrc}
+                  imageAlt={imageAlt}
                   badge={badge}
                   priority={index === 0}
                 />
@@ -128,7 +131,7 @@ export default function HomePage() {
       <section className="l-section" aria-label="Latest posts">
         <div className="l-container">
           <MainGrid
-            posts={gridPosts.map(mapDemoToMainGridPost)}
+            posts={gridPosts.map(mapPostToMainGridPost)}
             ariaLabel="Latest posts"
             className={styles.mainGrid}
           />
