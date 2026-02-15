@@ -5,16 +5,16 @@ import Link from 'next/link';
 
 import { listTopics } from '@/lib/content/queries';
 
-import artCover from '@/lib/demo/topic-covers/art.png';
-import historyCover from '@/lib/demo/topic-covers/history.webp';
-import literatureCover from '@/lib/demo/topic-covers/literature.jpg';
-import musicCover from '@/lib/demo/topic-covers/music.jpg';
-import relationshipsCover from '@/lib/demo/topic-covers/relationships.avif';
-import scienceCover from '@/lib/demo/topic-covers/science.jpg';
-import screenCover from '@/lib/demo/topic-covers/screen.webp';
-import sportsCover from '@/lib/demo/topic-covers/sports.jpg';
-import technologyCover from '@/lib/demo/topic-covers/technology.jpg';
-import trueCrimeCover from '@/lib/demo/topic-covers/true-crime.webp';
+import artCover from '@/lib/topic-covers/art.png';
+import historyCover from '@/lib/topic-covers/history.webp';
+import literatureCover from '@/lib/topic-covers/literature.jpg';
+import musicCover from '@/lib/topic-covers/music.jpg';
+import relationshipsCover from '@/lib/topic-covers/relationships.avif';
+import scienceCover from '@/lib/topic-covers/science.jpg';
+import screenCover from '@/lib/topic-covers/screen.webp';
+import sportsCover from '@/lib/topic-covers/sports.jpg';
+import technologyCover from '@/lib/topic-covers/technology.jpg';
+import trueCrimeCover from '@/lib/topic-covers/true-crime.webp';
 
 import styles from './page.module.css';
 

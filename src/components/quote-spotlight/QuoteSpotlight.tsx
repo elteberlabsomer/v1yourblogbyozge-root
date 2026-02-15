@@ -5,8 +5,8 @@
 import Link from 'next/link';
 import { useEffect, useId, useRef, useState } from 'react';
 
-import type { QuoteSpotlightItem } from '../../lib/demo/quoteSpotlightItems';
-import { QUOTE_SPOTLIGHT_ITEMS } from '../../lib/demo/quoteSpotlightItems';
+import type { QuoteSpotlightItem } from "@/lib/quoteSpotlightItems";
+import { QUOTE_SPOTLIGHT_ITEMS } from "@/lib/quoteSpotlightItems";
 
 import styles from './QuoteSpotlight.module.css';
 
