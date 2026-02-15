@@ -1,0 +1,74 @@
+/* PostShareActions - tokenized, no responsive */
+
+.shareButtons {
+  display: flex;
+  gap: var(--space-3);
+  margin-bottom: var(--space-6);
+  flex-wrap: nowrap;
+  align-items: center;
+}
+
+
+.shareBtn {
+  display: inline-flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  font-family: var(--font-ui);
+  font-size: var(--fs-ui-13);
+  font-weight: var(--font-weight-semibold);
+  color: var(--text-ink);
+  background: var(--bg-muted);
+  border: var(--border-width-1) solid var(--border-default);
+  border-radius: var(--radius-lg);
+    flex: 1 1 0;
+  min-width: 0;
+  justify-content: center;
+  white-space: nowrap;
+  cursor: pointer;
+  -webkit-tap-highlight-color: var(--tap-highlight);
+  transition: transform var(--transition-standard),
+    background-color var(--transition-standard),
+    border-color var(--transition-standard),
+    color var(--transition-standard);
+}
+
+.shareBtn:hover {
+  transform: translateY(calc(var(--space-1) * -0.5));
+}
+
+.shareBtn svg {
+  width: var(--space-4);
+  height: var(--space-4);
+  fill: currentColor;
+}
+
+.shareBtn.twitter:hover {
+  background: var(--social-twitter);
+  border-color: var(--social-twitter);
+  color: var(--text-inverse);
+}
+
+.shareBtn.facebook:hover {
+  background: var(--social-facebook);
+  border-color: var(--social-facebook);
+  color: var(--text-inverse);
+}
+
+.shareBtn.reddit:hover {
+  background: var(--social-reddit);
+  border-color: var(--social-reddit);
+  color: var(--text-inverse);
+}
+@media (max-width: 1024px) {
+  .shareButtons {
+    gap: var(--space-2-5);
+  }
+
+  .shareBtn {
+    padding: var(--space-3) var(--space-4);
+  }
+}
+ 
+
+

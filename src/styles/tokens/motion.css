@@ -1,0 +1,44 @@
+@layer tokens {
+  :root {
+    /* =========================================================
+       MOTION — Durations
+       ========================================================= */
+    --motion-duration-instant: 100ms;
+    --motion-duration-fast: 120ms;
+    --motion-duration-standard: 200ms;
+    --motion-duration-slower: 300ms;
+    --motion-duration-medium: 400ms;
+    --motion-duration-slow: 1600ms;
+      
+
+    /* =========================================================
+       MOTION — Easings
+       ========================================================= */
+    --ease-linear: linear;
+    --ease-in: cubic-bezier(0.4, 0, 1, 1);
+    --ease-out: cubic-bezier(0, 0, 0.2, 1);
+    --ease-in-out: ease-in-out;
+    --ease-standard: ease;
+
+    /* =========================================================
+       MOTION — Transitions
+       ========================================================= */
+    --transition-instant: var(--motion-duration-instant) var(--ease-standard);
+    --transition-fast: var(--motion-duration-fast) var(--ease-standard);
+    --transition-standard: var(--motion-duration-standard) var(--ease-standard);
+    --transition-slow: var(--motion-duration-slower) var(--ease-standard);
+    --transition-snap: 80ms linear;
+    --transition-link-decoration: text-decoration-color var(--link-transition), text-decoration-thickness var(--link-transition), text-underline-offset var(--link-transition);
+     --media-zoom-duration-slow: var(--motion-duration-slow);  /* 1600ms */ 
+     --transition-interactive: background var(--transition-standard), 
+                          color var(--transition-standard),
+                          transform var(--transition-standard);
+    /* Media zoom on hover */
+    --media-zoom-scale: 1.06;
+    --media-zoom-duration: var(--motion-duration-medium);
+    --media-zoom-ease: var(--ease-standard);
+    /* MOTION — Transforms */
+    --lift-y: calc(var(--border-width-1) * -1);
+
+  }
+}

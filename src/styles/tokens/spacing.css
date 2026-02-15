@@ -1,0 +1,97 @@
+@layer tokens {
+  :root {
+    /* =========================================================
+       BREAKPOINT REFERENCES (do not use var() inside media queries)
+       ========================================================= */
+    --bp-mobile-max: 430px;
+    --bp-tablet-max: 1024px;
+    --bp-desktop-min: 1025px;;
+
+    /* =========================================================
+       SPACING SCALE (4px rhythm)
+       ========================================================= */
+    --space-0: 0px;
+    --space-0-5: 2px;
+    --space-1: 4px;
+    --space-1-5: 6px;
+    --space-2: 8px;
+    --space-2-5: 10px;
+    --space-3: 12px;
+    --space-3-5: 14px;
+    --space-4: 16px;
+    --space-4-5: 18px;
+    --space-5: 20px;
+    --space-6: 24px;
+    --space-7: 28px;
+    --space-8: 32px;
+    --space-9: 36px;
+    --space-10: 40px;
+    --space-12: 48px;
+    --space-12-5: 50px;
+    --space-16: 64px;
+    --space-20: 80px;
+    
+
+    /* =========================================================
+       BORDER WIDTHS
+       ========================================================= */
+    --border-width-1: 1px;
+    --border-width-2: 2px;
+ 
+    /* =========================================================
+       TOUCH TARGETS
+       ========================================================= */
+    --touch-min: 44px;
+
+    /* =========================================================
+       LAYOUT CONSTANTS (tokenized, not hardcoded in layout.css)
+       ========================================================= */
+    --container-max: 1280px;
+    --container-max-narrow: 960px;
+    --prose-max: 720px;
+
+    --header-height: 70px;
+    --drawer-max-width: 320px;
+    --overlay-max-width: 600px;
+    --search-trigger-min-width: 220px;
+
+        /* Chrome (Drawer/Search Overlay) */
+    --chrome-drawer-width-mobile: 85%;
+    --chrome-search-inset-x: var(--space-5);
+    --chrome-search-top: 20vh;
+    --chrome-search-max-height: 60vh;
+
+    /* Derived spacing */
+    --drawer-padding-top: calc(var(--space-6) + var(--header-height));
+    --footer-brand-max-width: calc(var(--space-20) * 3.5);
+    --chrome-hamburger-gap: calc(var(--space-1) + var(--border-width-2));
+
+
+     
+
+    /* Page padding (mobile/tablet/desktop) */
+    --page-pad-x-mobile: var(--space-4);  /* 16px */
+    --page-pad-x-tablet: var(--space-6);  /* 24px */
+    --page-pad-x-desktop: var(--space-6); /* 24px */
+
+    --page-pad-y-mobile: var(--space-12);  /* 48px */
+    --page-pad-y-tablet: var(--space-12);  /* 48px */
+    --page-pad-y-desktop: var(--space-12); /* 48px */
+
+    /* Section spacing */
+    --section-gap: var(--space-8); /* 32px */
+
+
+    
+
+    --border-1: var(--border-width-1);
+    --border-2: var(--border-width-2);
+  }
+
+  @supports (height: 1dvh) {
+    :root {
+      --chrome-search-top: 20dvh;
+      --chrome-search-max-height: 60dvh;
+    }
+  }
+}

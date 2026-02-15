@@ -1,0 +1,134 @@
+@layer tokens {
+  :root {
+    /* =========================================================
+       FONT FAMILIES (wired via next/font CSS variables)
+       ========================================================= */
+    --font-ui: var(
+      --font-dm-sans,
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      Roboto,
+      "Helvetica Neue",
+      Arial,
+      sans-serif,
+      "Apple Color Emoji",
+      "Segoe UI Emoji",
+      "Segoe UI Symbol"
+    );
+
+    --font-display: var(
+      --font-work-sans,
+      "Work Sans",
+      -apple-system,
+      BlinkMacSystemFont,
+      "Segoe UI",
+      sans-serif
+    );
+    /* Scanner-friendly stubs (Next/font will override these via html class vars) */
+    --font-dm-sans: "DM Sans";
+    --font-work-sans: "Work Sans";
+    --font-lora: "Lora";
+
+     /* Legacy/starter alias (keeps current behavior) */
+     --font-geist-sans: var(--font-ui);
+
+    /* Legacy size alias used by base.css */
+    --text-lg: var(--fs-body);
+
+
+    --font-prose: var(--font-lora, "Lora", Georgia, "Times New Roman", serif);
+
+    /* =========================================================
+       FONT WEIGHTS
+       ========================================================= */
+    --font-weight-light: 300;
+    --font-weight-normal: 400;
+    --font-weight-medium: 500;
+    --font-weight-semibold: 600;
+    --font-weight-bold: 700;
+    --font-weight-extrabold: 800;
+
+    /* =========================================================
+       LETTER SPACING
+       ========================================================= */
+    --tracking-wide: 0.08em; 
+    --tracking-tight-2: calc(var(--tracking-wide) * -0.375);
+    --tracking-tight-1: calc(var(--tracking-wide) * -0.125);
+    --tracking-loose-1: calc(var(--tracking-wide) * 0.625);
+    --tracking-brand: var(--tracking-tight-2);
+    --tracking-nav: var(--tracking-tight-1);
+    --tracking-footer-title: var(--tracking-loose-1);
+
+
+    /* =========================================================
+       LINE HEIGHTS
+       ========================================================= */
+    --leading-none: 1;
+    --leading-tight: 1.2;
+    --leading-snug: 1.3;
+    --leading-normal: 1.5;
+    --leading-relaxed: 1.6;
+    --leading-loose: 1.75;
+
+    /* =========================================================
+       TYPE SCALE (raw values)
+       ========================================================= */
+    --text-10: 10px;
+    --text-11: 11px;
+    --text-12: 12px;
+    --text-13: 13px;
+    --text-14: 14px;
+    --text-15: 15px;
+    --text-16: 16px;
+    --text-17: 18px;
+    --text-18: 18px;
+    --text-19: 19px;
+    --text-20: 20px;
+    --text-22: 22px;
+    --text-24: 24px;
+    --text-28: 28px;
+    --text-32: 32px;
+    --text-36: 36px;
+    --text-48: 48px;
+
+    /* Optional display-only sizes */
+    --text-40: 40px;
+    --text-56: 56px;
+    --text-64: 64px;
+    --text-72: 72px;
+
+    /* =========================================================
+       SEMANTIC SIZE ROLES
+       ========================================================= */
+    --fs-h1-lg: var(--text-48);
+    --fs-h1-md: var(--text-36);
+    --fs-h1-sm: var(--text-28);
+    --fs-h1-xs: var(--text-24);
+
+    --fs-h2: var(--text-32);
+    --fs-h2-md: var(--text-28);
+    --fs-h2-sm: var(--text-24);
+
+    --fs-h3: var(--text-22);
+
+    --fs-summary-lg: var(--text-20);
+    --fs-summary-md: var(--text-18);
+    --fs-summary-sm: var(--text-16);
+     
+    --fs-body: var(--text-16);
+    --fs-body-sm: var(--text-15);
+
+    --fs-meta: var(--text-13);
+    --fs-meta-sm: var(--text-13);
+    --fs-brand: var(--text-22);
+    --fs-ui-11: var(--text-11);
+    --fs-ui-12: var(--text-12);
+    --fs-ui-13: var(--text-13);
+    --fs-ui-14: var(--text-14);
+    --fs-ui-15: var(--text-15);
+    --fs-ui-16: var(--text-16);
+    --fs-ui-17: var(--text-17);
+    --fs-ui-18: var(--text-18);
+  }
+}

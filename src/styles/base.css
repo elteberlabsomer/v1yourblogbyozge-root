@@ -1,0 +1,99 @@
+@layer base {
+  html {
+    scroll-behavior: auto;
+  }
+
+  body {
+    font-family: var(--font-ui);
+    font-size: var(--text-lg);
+    line-height: var(--leading-normal);
+    background: var(--bg-app);
+    color: var(--text-body);
+    -webkit-font-smoothing: antialiased;
+    -moz-osx-font-smoothing: grayscale;
+    text-rendering: optimizeLegibility;
+  }
+
+  h1,
+  h2,
+  h3,
+  h4,
+  h5,
+  h6 {
+    margin: 0;
+    font-family: var(--font-display);
+    color: var(--text-ink);
+  }
+
+  p {
+    margin: 0;
+  }
+
+  button,
+  input,
+  select,
+  textarea {
+    font: inherit;
+    color: inherit;
+  }
+
+  a {
+    color: var(--link-color);
+    text-decoration-line: underline;
+    text-decoration-thickness: var(--link-underline-thickness);
+    text-decoration-color: var(--link-underline);
+    text-underline-offset: var(--link-underline-offset);
+    text-decoration-skip-ink: auto;
+    transition: var(--transition-link-decoration);
+  }
+
+  a:hover {
+    text-decoration-thickness: var(--link-underline-thickness-hover);
+    text-decoration-color: var(--link-underline-hover);
+  }
+
+  a:visited {
+    color: var(--link-visited);
+    text-decoration-color: var(--link-visited-underline);
+  }
+
+  :where(
+      a,
+      button,
+      input,
+      select,
+      textarea,
+      summary,
+      [tabindex]:not([tabindex="-1"])
+    ):focus:not(:focus-visible) {
+    outline: none;
+  }
+
+  :where(
+      a,
+      button,
+      input,
+      select,
+      textarea,
+      summary,
+      [tabindex]:not([tabindex="-1"])
+    ):focus-visible {
+    outline: var(--focus-ring-width) var(--focus-ring-style) var(--focus-ring-color);
+    outline-offset: var(--focus-ring-offset);
+    transition: var(--focus-transition);
+  }
+
+  @media (prefers-reduced-motion: reduce) {
+    html {
+      scroll-behavior: auto !important;
+    }
+
+    *,
+    *::before,
+    *::after {
+      animation-duration: 1ms !important;
+      animation-iteration-count: 1 !important;
+      transition-duration: 1ms !important;
+    }
+  }
+}

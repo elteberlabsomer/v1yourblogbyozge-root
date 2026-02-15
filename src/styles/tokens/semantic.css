@@ -1,0 +1,186 @@
+@layer tokens {
+  :root {
+    /* =========================================================
+       SEMANTIC — Surfaces & Backgrounds
+       ========================================================= */
+    --surface-1: var(--palette-white);
+    --surface-2: var(--palette-gray-50);
+    --surface-3: var(--palette-white);
+    --surface-muted: var(--surface-2);
+
+    --bg-app: var(--surface-1);
+    --bg-muted: var(--surface-2);
+    --bg-inverse: var(--palette-gray-900);
+
+    /* =========================================================
+       SEMANTIC — Text
+       (Pulled from your existing style intent: ink/body/meta/summary)
+       ========================================================= */
+    --text-ink: var(--palette-black);
+    --text-body: var(--palette-gray-900);
+    --text-summary: var(--palette-gray-800);
+    --text-meta: var(--palette-gray-600);
+    --text-inverse: var(--palette-white);
+    --accent: var(--palette-red-500);
+
+    /* =========================================================
+       SEMANTIC — Borders & Dividers
+       (Keep the alpha-border look you already had in your scan results)
+       ========================================================= */
+     
+    --border-default: var(--palette-black-a14);
+    --border-strong: var(--palette-black-a22);
+    --divider: var(--border-default); 
+    --border-ui: var(--palette-gray-200);
+    --text-subtle: var(--palette-gray-400);
+    --border-faint: var(--palette-gray-50);
+
+
+    /* =========================================================
+       SEMANTIC — Links (visited keeps hue; alpha changes)
+       ========================================================= */
+    --link-color: var(--text-ink);
+    --link-underline: var(--palette-black-a30);
+    --link-underline-hover: var(--palette-black-a60);
+    --link-visited: var(--palette-black-a72);
+    --link-visited-underline: var(--palette-black-a22);
+    --link-underline-offset: 4px;
+    --link-underline-thickness: 1px;
+    --link-underline-thickness-hover: 2px;
+    --link-transition: 200ms ease-in-out;
+
+    /* =========================================================
+       SEMANTIC — Focus
+       ========================================================= */
+    --focus-ring-color: var(--palette-focus-ring);
+
+    --focus-ring-width: 2px;
+    --focus-ring-offset: 2px;
+    --focus-ring-style: solid;
+    --focus-transition: outline-offset 150ms ease;
+
+    /* =========================================================
+       SEMANTIC — Buttons (ink-based)
+       ========================================================= */
+    --primary: var(--palette-black);
+    --primary-hover: var(--palette-gray-900);
+    --primary-active: var(--palette-black);
+    --on-primary: var(--bg-muted);
+
+    /* =========================================================
+       SEMANTIC — States (neutral disabled mapping)
+       ========================================================= */
+    --text-disabled: var(--palette-gray-400);
+    --bg-disabled: var(--palette-gray-100);
+    --border-disabled: var(--palette-gray-200);
+
+    /* =========================================================
+       SEMANTIC — Semantic Colors (success/error/warn/info)
+       ========================================================= */
+    --success-text: #166534;
+    --success-bg: #f0fdf4;
+    --success-border: #bbf7d0;
+    --success-emphasis: #16a34a;
+
+    --error-text: #991b1b;
+    --error-bg: #fef2f2;
+    --error-border: #fecaca;
+    --error-emphasis: #dc2626;
+
+    --warning-text: #92400e;
+    --warning-bg: #fffbeb;
+    --warning-border: #fde68a;
+    --warning-emphasis: #f59e0b;
+
+    --info-text: #1e3a8a;
+    --info-bg: #eff6ff;
+    --info-border: #bfdbfe;
+    --info-emphasis: #3b82f6;
+
+    /* =========================================================
+       SEMANTIC — Shadows (quiet editorial)
+       ========================================================= */
+    --shadow-none: none;
+    --shadow-sm: 0 1px 3px rgba(18, 18, 18, 0.06);
+    --shadow-md: 0 8px 20px -4px rgba(18, 18, 18, 0.08);
+    --shadow-lg: 0 12px 32px -8px rgba(18, 18, 18, 0.08), 0 4px 12px rgba(18, 18, 18, 0.06);
+    --shadow-xl: 0 32px 64px -12px rgba(18, 18, 18, 0.12), 0 8px 24px rgba(18, 18, 18, 0.08), 0 2px 8px rgba(18, 18, 18, 0.04);
+
+    /* =========================================================
+       SEMANTIC — Z-Index (semantic layer system)
+       ========================================================= */
+    --z-base: 0;
+    --z-content: 1;
+    --z-sticky: 100;
+    --z-dropdown: 200;
+    --z-header: 300;
+    --z-drawer: 400;
+    --z-modal: 500;
+    --z-popover: 600;
+    --z-toast: 700;
+    --z-tooltip: 800; 
+    --z-drawer-backdrop: 350;
+    --z-search-backdrop: 450;
+    --z-search: 480;
+    --z-overlay: 300; /* alias for header */
+
+    /* =========================================================
+       SEMANTIC — Newsletter (existing)
+       ========================================================= */
+    --newsletter-accent: var(--palette-red-600);
+    --newsletter-accent-hover: var(--palette-red-700);
+    --newsletter-accent-active: var(--palette-red-800);
+    --newsletter-accent-ring: var(--palette-red-a10);
+ 
+     
+    
+    /* Compatibility / contract tokens (keep visuals stable) */
+   --tap-highlight: var(--palette-transparent);
+    --backdrop: rgba(0, 0, 0, 0.5);
+
+    --border-width: var(--border-width-1);
+    --border-on-white: var(--border-subtle);
+    --surface-border-default: var(--border-on-white);
+
+ 
+
+/* Semantic tokens */
+--border-subtle: var(--palette-black-a08);
+--header-bg: var(--palette-white-a98);
+--header-border: var(--border-subtle);
+
+ 
+    
+/* On-media overlays (PostWallSquare scrim + title shadow) */
+--overlay-light: rgba(0, 0, 0, 0);
+--overlay-fade: rgba(0, 0, 0, 0.20);
+--overlay-dark: rgba(0, 0, 0, 0.72);
+--opacity-scrim: 0.88;
+
+/* Backdrop blur (badge glass feel) */
+--backdrop-blur-sm: 8px;
+
+/* PostWallSquare badge (category chip) */
+--badge-bg: var(--palette-red-600);
+--badge-text: var(--palette-white);
+--badge-border-on-media: var(--palette-white-a18);
+
+/* Semantic social tokens */
+--social-twitter: var(--palette-brand-twitter);
+--social-facebook: var(--palette-brand-facebook);
+--social-reddit: var(--palette-brand-reddit);
+--social-linkedin: var(--palette-brand-linkedin);
+
+/* Social card gradients */
+--social-twitter-card-start: var(--palette-charcoal-900);
+--social-twitter-card-end: var(--palette-charcoal-800);
+--social-reddit-card-start: var(--palette-brand-reddit);
+--social-reddit-card-end: var(--palette-brand-reddit-soft);
+
+
+
+
+  }
+}
+
+

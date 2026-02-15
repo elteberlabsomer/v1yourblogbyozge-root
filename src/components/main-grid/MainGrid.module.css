@@ -1,0 +1,105 @@
+.root {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: var(--space-6);
+}
+
+.item {
+  min-width: 0;
+}
+
+.card {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-2);
+  min-width: 0;
+}
+
+.mediaLink {
+  display: block;
+  color: inherit;
+  text-decoration: none;
+}
+
+
+.media {
+  position: relative;
+  aspect-ratio: 16 / 9;
+  overflow: hidden;
+
+  border-radius: var(--radius-md);
+  border: var(--border-width) solid var(--border-on-white);
+  background: var(--surface-2);
+}
+
+.img {
+  object-fit: cover;
+  transform: scale(1);
+  transition: transform var(--media-zoom-duration) var(--media-zoom-ease);
+}
+
+.mediaLink:hover .img,
+.mediaLink:focus-visible .img {
+  transform: scale(var(--media-zoom-scale));
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .img {
+    transition: none;
+  }
+
+  .mediaLink:hover .img,
+  .mediaLink:focus-visible .img {
+    transform: none;
+  }
+}
+
+.mediaFallback {
+  width: 100%;
+  height: 100%;
+}
+
+.categoryLink,
+.categoryText {
+  margin: 0;
+  color: var(--accent, var(--text-meta));
+  font-weight: 600;
+  text-decoration: none;
+}
+
+.categoryLink::before,
+.categoryText::before {
+  content: "#";
+}
+
+
+.categoryLink:hover,
+.categoryLink:focus-visible {
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: var(--link-underline-thickness-hover);
+  text-underline-offset: var(--link-underline-offset);
+}
+
+.title {
+  margin: 0;
+  color: var(--text-ink);
+}
+
+.titleLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+
+.titleLink:hover,
+.titleLink:focus-visible {
+  text-decoration-line: underline;
+  text-decoration-color: currentColor;
+  text-decoration-thickness: var(--link-underline-thickness-hover);
+  text-underline-offset: var(--link-underline-offset);
+}
