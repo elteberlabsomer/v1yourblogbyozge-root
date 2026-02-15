@@ -8,6 +8,9 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
+// Bu satırı ekle - dynamic routing'i aç
+export const dynamicParams = true;
+
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
   const post = await content.getPostBySlug(slug);
