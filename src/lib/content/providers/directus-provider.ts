@@ -80,7 +80,7 @@ async function directusFetchJson<T>(path: string, init?: RequestInit): Promise<T
       Accept: 'application/json',
       ...(init?.headers ?? {}),
     },
-    next: { revalidate: 60 },
+    next: { revalidate: 3600 },
   });
 
   if (!res.ok) {

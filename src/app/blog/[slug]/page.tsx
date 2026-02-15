@@ -8,8 +8,8 @@ type PageProps = {
   params: Promise<{ slug: string }>;
 };
 
-// Bu satırı ekle - dynamic routing'i aç
 export const dynamicParams = true;
+export const revalidate = 3600;
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
@@ -47,24 +47,25 @@ export async function generateMetadata({ params }: PageProps): Promise<Metadata>
 }
 
 export async function generateStaticParams() {
-  const slugs = await content.listAllSlugs();
-  return slugs.map((slug: string) => ({ slug }));
+  try {
+    const slugs = await content.listAllSlugs();
+    return slugs.map((slug: string) => ({ slug }));
+  } catch (error) {
+    console.warn('Could not fetch slugs at build time; falling back to on-demand rendering.', error);
+    return [];
+  }
 }
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
-  
+
+  const post = await content.getPostBySlug(slug);
+  if (!post) {
+    notFound();
+  }
+
   const allPostsResult = await content.listPosts({ limit: 100 });
-  const allPosts = allPostsResult?.items ?? [];
-
-  if (allPosts.length === 0) {
-    notFound();
-  }
-
-  const currentPost = allPosts.find(p => p.slug === slug);
-  if (!currentPost) {
-    notFound();
-  }
+  const allPosts = allPostsResult?.items?.length ? allPostsResult.items : [post];
 
   return (
     <main className={styles.main}>

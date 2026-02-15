@@ -60,9 +60,7 @@ export function PostHeader(props: PostHeaderProps) {
             <line x1="8" y1="2" x2="8" y2="6" />
             <line x1="3" y1="10" x2="21" y2="10" />
           </svg>
-          <time dateTime={props.dateIso}>
-            {formatDateEn(props.dateIso)}
-          </time>
+          <time dateTime={props.dateIso}>{formatDateEn(props.dateIso)}</time>
         </span>
 
         <span className={styles.metaDivider} aria-hidden="true" />
@@ -78,16 +76,18 @@ export function PostHeader(props: PostHeaderProps) {
 
       <PostShareActions url={props.shareUrl} title={props.title} />
 
-      <figure className={styles.cover}>
-        <Image
-          className={styles.coverImg}
-          src={props.coverSrc}
-          alt={props.coverAlt}
-          width={1200}
-          height={675}
-          priority
-        />
-      </figure>
+      {props.coverSrc ? (
+        <figure className={styles.cover}>
+          <Image
+            className={styles.coverImg}
+            src={props.coverSrc}
+            alt={props.coverAlt}
+            width={1200}
+            height={675}
+            priority
+          />
+        </figure>
+      ) : null}
     </header>
   );
 }
