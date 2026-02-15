@@ -7,8 +7,10 @@ type DirectusPostItem = {
   status?: string;
   title?: string;
   summary?: string;
+  content?: string;
   date_created?: string;
   cover_image?: string | null;
+  cover_alt?: string | null;
   topic?: {
     slug: string;
     label: string;
@@ -47,6 +49,7 @@ function mapDirectusToPost(item: DirectusPostItem): Post {
   const title = asNonEmptyString(item.title);
   const summary = asNonEmptyString(item.summary);
   const coverId = item.cover_image ?? '';
+  const htmlContent = item.content || '';
 
   return {
     slug: item.slug,
@@ -56,14 +59,14 @@ function mapDirectusToPost(item: DirectusPostItem): Post {
     summary,
     cover: {
       src: coverId ? directusAssetUrl(coverId, { key: 'thumb' }) : '',
-      alt: title || 'Cover image',
+      alt: item.cover_alt || title || 'Cover image',
     },
     topic: item.topic?.slug && item.topic?.label ? { slug: item.topic.slug, label: item.topic.label } : undefined,
     tags: (item.tags ?? [])
       .map((t) => t.tags_id)
       .filter((t): t is NonNullable<typeof t> => Boolean(t?.slug && t?.label))
       .map((t) => ({ slug: t.slug, label: t.label })),
-    body: [],
+    body: htmlContent ? [{ kind: 'html' as const, html: htmlContent }] : [],
   };
 }
 
@@ -112,8 +115,10 @@ async function listPostsPaged(options?: ListPostsOptions): Promise<ListPostsResu
         'status',
         'title',
         'summary',
+        'content',
         'date_created',
         'cover_image',
+        'cover_alt',
         'topic.slug',
         'topic.label',
         'tags.tags_id.slug',
@@ -159,8 +164,10 @@ export const directusProvider: ContentProvider = {
         'status',
         'title',
         'summary',
+        'content',
         'date_created',
         'cover_image',
+        'cover_alt',
         'topic.slug',
         'topic.label',
         'tags.tags_id.slug',
@@ -178,7 +185,6 @@ export const directusProvider: ContentProvider = {
     const slugs: string[] = [];
 
     let offset = 0;
-    // eslint-disable-next-line no-constant-condition
     while (true) {
       const params = new URLSearchParams({
         limit: String(pageSize),

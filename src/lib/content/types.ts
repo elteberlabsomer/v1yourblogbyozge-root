@@ -3,10 +3,9 @@ export type ContentRef = {
   label: string;
 };
 
-export type PostBodyBlock = {
-  kind: 'p' | 'h2';
-  text: string;
-};
+export type PostBodyBlock = 
+  | { kind: 'p' | 'h2'; text: string }
+  | { kind: 'html'; html: string };
 
 export type Post = {
   slug: string;

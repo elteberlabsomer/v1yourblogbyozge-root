@@ -2,30 +2,22 @@
 
 import { useEffect, useMemo, useRef, useState } from 'react';
 import Link from 'next/link';
-
-import {
-  DEMO_POSTS,
-  getDemoPostBySlug,
-  getDemoPostsByTag,
-  getDemoPostsByTopic,
-  type DemoPost,
-} from '@/lib/demo';
-
+import type { Post } from '@/lib/content/types';
 import { PostHeader } from '@/components/post-header/PostHeader';
 import { PostBody } from '@/components/post-body/PostBody';
 import { PostWallSquare } from '@/components/post-wall-square/PostWallSquare';
 import { MainGrid } from '@/components/main-grid/MainGrid';
 import { TagSpotlight, TopicSpotlight } from '@/components/tag-spotlight/TagSpotlight';
-
 import pageStyles from '@/app/blog/[slug]/page.module.css';
+
 
 type Props = {
   initialSlug: string;
+  serverPosts: Post[];
 };
 
 const WINDOW = 5;
 const LOAD_AHEAD = 3;
-
 const URL_DEBOUNCE_MS = 120;
 const LINK_NAV_LOCK_MS = 2500;
 
@@ -65,28 +57,30 @@ function seededShuffle<T>(arr: readonly T[], seedStr: string): T[] {
   return out;
 }
 
-function toSpotlightPosts(
-  posts: Array<{
-    slug: string;
-    title: string;
-    coverSrc?: string | null;
-    coverAlt?: string | null;
-  }>,
-) {
+function toSpotlightPosts(posts: Post[]) {
   return posts.map((p) => ({
     slug: p.slug,
     title: p.title,
-    coverSrc: p.coverSrc ?? '',
-    coverAlt: p.coverAlt ?? p.title,
+    coverSrc: p.cover?.src ?? '',
+    coverAlt: p.cover?.alt ?? p.title,
   }));
 }
 
+function getPostsByTag(allPosts: Post[], tagSlug: string) {
+  return allPosts.filter((p) => p.tags?.some((t) => t.slug === tagSlug));
+}
+
+function getPostsByTopic(allPosts: Post[], topicSlug: string) {
+  return allPosts.filter((p) => p.topic?.slug === topicSlug);
+}
+
 function pickOneByTag(
+  allPosts: Post[],
   tag: { slug: string; label: string },
   seed: string,
   exclude: Set<string>,
 ) {
-  const candidates = getDemoPostsByTag(tag.slug)
+  const candidates = getPostsByTag(allPosts, tag.slug)
     .filter((p) => !exclude.has(p.slug))
     .sort(sortByDateDesc);
 
@@ -122,19 +116,20 @@ function PostStreamItem({
   allByDate,
   onRef,
 }: {
-  post: DemoPost;
-  allByDate: DemoPost[];
+  post: Post;
+  allByDate: Post[];
   onRef: (el: HTMLElement | null) => void;
 }) {
-  const shareUrl = `https://yourdomain.com/blog/${post.slug}`;
+  const siteUrl = process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000';
+  const shareUrl = `${siteUrl}/blog/${post.slug}`;
 
   const afterData = useMemo(() => {
     const usedMobile = new Set<string>([post.slug]);
 
-    const selectedTagsMobile = post.tags.slice(0, 4);
+    const selectedTagsMobile = (post.tags ?? []).slice(0, 4);
     const wallItemsMobile = selectedTagsMobile
       .map((tag) => {
-        const picked = pickOneByTag(tag, `${post.slug}:wall:${tag.slug}`, usedMobile);
+        const picked = pickOneByTag(allByDate, tag, `${post.slug}:wall:${tag.slug}`, usedMobile);
         if (!picked) {
           return null;
         }
@@ -142,24 +137,25 @@ function PostStreamItem({
       })
       .filter(Boolean) as Array<{
       tag: { slug: string; label: string };
-      post: { slug: string; title: string; coverSrc: string; coverAlt: string };
+      post: Post;
     }>;
 
-    const topicCandidatesMobile = getDemoPostsByTopic(post.topicSlug)
+    const topicSlug = post.topic?.slug ?? '';
+    const topicCandidatesMobile = getPostsByTopic(allByDate, topicSlug)
       .filter((p) => !usedMobile.has(p.slug))
       .sort(sortByDateDesc);
 
     const topicSpotlightMobile = toSpotlightPosts(
-      seededShuffle(topicCandidatesMobile, `${post.slug}:topic:${post.topicSlug}`).slice(0, 4),
+      seededShuffle(topicCandidatesMobile, `${post.slug}:topic:${topicSlug}`).slice(0, 4),
     );
 
     const latestFiveMobile = allByDate.filter((p) => !usedMobile.has(p.slug)).slice(0, 5);
 
     const usedWide = new Set<string>([post.slug]);
 
-    const selectedTagsWide = post.tags.slice(0, 2);
+    const selectedTagsWide = (post.tags ?? []).slice(0, 2);
     const tagSpotlightsWide = selectedTagsWide.map((tag) => {
-      const candidates = getDemoPostsByTag(tag.slug)
+      const candidates = getPostsByTag(allByDate, tag.slug)
         .filter((p) => !usedWide.has(p.slug))
         .sort(sortByDateDesc);
 
@@ -180,20 +176,26 @@ function PostStreamItem({
       tagSpotlightsWide,
       latestSixWide,
     };
-  }, [post.slug, post.topicSlug, allByDate]);
+  }, [post.slug, post.topic?.slug, allByDate, post.tags]);
+
+  const directusUrl = process.env.NEXT_PUBLIC_DIRECTUS_URL || process.env.DIRECTUS_URL || 'https://cms.yourblogbyosge.com';
+  const coverImageId = post.cover?.src?.match(/\/assets\/([a-f0-9-]+)/)?.[1];
+  const coverSrc = coverImageId 
+    ? `${directusUrl}/assets/${coverImageId}?key=portrait`
+    : (post.cover?.src ?? '');
 
   return (
     <section ref={onRef} className={pageStyles.streamPost} data-stream-slug={post.slug}>
       <article className={pageStyles.article}>
         <PostHeader
-          authorName="Özge Gülemeyen"
+          authorName={post.authorName}
           dateIso={post.dateIso}
-          categoryLabel={post.categoryLabel}
-          topicSlug={post.topicSlug}
+          categoryLabel={post.topic?.label ?? 'Uncategorized'}
+          topicSlug={post.topic?.slug ?? ''}
           title={post.title}
           summary={post.summary}
-          coverSrc={post.coverSrc}
-          coverAlt={post.coverAlt}
+          coverSrc={coverSrc}
+          coverAlt={post.cover?.alt ?? post.title}
           shareUrl={shareUrl}
         />
 
@@ -202,12 +204,15 @@ function PostStreamItem({
             if (block.kind === 'h2') {
               return <h2 key={idx}>{block.text}</h2>;
             }
+            if (block.kind === 'html') {
+              return <div key={idx} dangerouslySetInnerHTML={{ __html: block.html }} />;
+            }
             return <p key={idx}>{block.text}</p>;
           })}
         </PostBody>
 
         <footer className={pageStyles.tagsRow} aria-label="Post tags" data-stream-tags>
-          {post.tags.map((tag) => (
+          {(post.tags ?? []).map((tag) => (
             <Link key={tag.slug} href={`/tags/${tag.slug}`} className={pageStyles.tagLink}>
               #{tag.label}
             </Link>
@@ -223,8 +228,8 @@ function PostStreamItem({
                 key={`${tag.slug}:${p.slug}`}
                 href={`/blog/${p.slug}`}
                 title={p.title}
-                imageSrc={p.coverSrc}
-                imageAlt={p.coverAlt}
+                imageSrc={p.cover?.src ?? ''}
+                imageAlt={p.cover?.alt ?? p.title}
                 badge={{ label: `#${tag.label}`, href: `/tags/${tag.slug}` }}
                 priority={idx === 0}
               />
@@ -232,8 +237,8 @@ function PostStreamItem({
           </div>
 
           <TopicSpotlight
-            topicSlug={post.topicSlug}
-            topicLabel={post.categoryLabel}
+            topicSlug={post.topic?.slug ?? ''}
+            topicLabel={post.topic?.label ?? 'Uncategorized'}
             posts={afterData.topicSpotlightMobile}
             limit={4}
           />
@@ -273,20 +278,15 @@ function PostStreamItem({
   );
 }
 
-export function PostStreamReader({ initialSlug }: Props) {
-  const ordered = useMemo(() => [...DEMO_POSTS].sort(sortByDateDesc), []);
+export function PostStreamReader({ initialSlug, serverPosts }: Props) {
+  const ordered = useMemo(() => [...serverPosts].sort(sortByDateDesc), [serverPosts]);
   const total = ordered.length;
 
   const initialIndex = useMemo(() => {
-    const p = getDemoPostBySlug(initialSlug);
-    if (!p) {
-      return 0;
-    }
-    const idx = ordered.findIndex((x) => x.slug === p.slug);
+    const idx = ordered.findIndex((x) => x.slug === initialSlug);
     return idx >= 0 ? idx : 0;
   }, [initialSlug, ordered]);
 
-  // Append-only: render current post and extend DOWNWARD only. No removal -> no scroll jump.
   const renderStart = initialIndex;
 
   const [renderEnd, setRenderEnd] = useState(() =>
@@ -444,7 +444,6 @@ export function PostStreamReader({ initialSlug }: Props) {
     };
   }, [ordered, total]);
 
-  // Attach new elements to the observer map as they mount.
   const indices = useMemo(() => {
     const out: number[] = [];
     for (let i = renderStart; i <= renderEnd; i++) {
