@@ -9,7 +9,7 @@ type PageProps = {
 };
 
 export const dynamicParams = true;
-export const revalidate = 3600;
+export const revalidate = process.env.NODE_ENV === 'development' ? 0 : 3600;
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
