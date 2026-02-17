@@ -9,7 +9,9 @@ type PageProps = {
 };
 
 export const dynamicParams = true;
-export const revalidate = 3600;
+export const revalidate = 0;
+export const dynamic = 'force-dynamic';
+
 
 export async function generateMetadata({ params }: PageProps): Promise<Metadata> {
   const { slug } = await params;
