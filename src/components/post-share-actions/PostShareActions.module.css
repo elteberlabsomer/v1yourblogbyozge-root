@@ -1,12 +1,12 @@
 /* PostShareActions - tokenized, no responsive */
-
 .shareButtons {
   display: flex;
   gap: var(--space-3);
-  margin-bottom: var(--space-6);
+  margin-bottom: 0;
   flex-wrap: nowrap;
   align-items: center;
 }
+
 
 
 .shareBtn {

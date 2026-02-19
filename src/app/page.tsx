@@ -8,11 +8,13 @@ import { SocialMediaCard } from '@/components/social-media-card/SocialMediaCard'
 import { VideoGrid, type VideoGridPost } from '@/components/video-grid/VideoGrid';
 import { NewsletterSignupDemo } from '@/components/newsletter-signup/NewsletterSignupDemo';
 import { TagSpotlight, type TagSpotlightPost } from '@/components/tag-spotlight/TagSpotlight';
+import { listPostsByTagSlug } from '@/lib/content/queries';
+
 
 import styles from './page.module.css';
 
 const AVATAR =
-  'https://pbs.twimg.com/profile_images/1967148637877608448/sY1X17Wg_400x400.jpg';
+  'https://cms.yourblogbyosge.com/assets/e5279d49-8702-4f0a-9b09-2b156224ffb7.avif';
 
 function parseDateIso(dateIso?: string) {
   if (!dateIso) {
@@ -64,6 +66,95 @@ function hasTag(post: Post, tagSlug: string) {
   const tags = Array.isArray(post.tags) ? post.tags : [];
   return tags.some((t) => t.slug === tagSlug);
 }
+type TagCard = {
+  tagSlug: string;
+  tagLabel: string;
+  posts: TagSpotlightPost[];
+};
+
+function normalizeKey(value: unknown): string {
+  if (typeof value !== 'string') return '';
+  try {
+    return decodeURIComponent(value).trim().toLowerCase();
+  } catch {
+    return value.trim().toLowerCase();
+  }
+}
+
+function hash32(input: string): number {
+  let h = 2166136261;
+  for (let i = 0; i < input.length; i++) {
+    h ^= input.charCodeAt(i);
+    h = Math.imul(h, 16777619);
+  }
+  return h >>> 0;
+}
+
+function buildRandomSpotlightTagCards(params: {
+  items: Post[];
+  usedSlugs: Set<string>;
+  count: number;
+}): TagCard[] {
+  const buckets = new Map<
+    string,
+    { tagSlug: string; tagLabel: string; rawPosts: Post[] }
+  >();
+
+  for (const p of params.items) {
+    if (params.usedSlugs.has(p.slug)) continue;
+
+    const tags = Array.isArray(p.tags) ? p.tags : [];
+    for (const t of tags) {
+      const key = normalizeKey(t?.slug);
+      if (!key) continue;
+      if (key === 'videos') continue;
+
+      const tagSlug = typeof t.slug === 'string' ? t.slug : '';
+      if (!tagSlug) continue;
+
+      const tagLabel =
+        typeof t.label === 'string' && t.label.trim().length > 0
+          ? t.label
+          : tagSlug;
+
+      const existing = buckets.get(key);
+      if (!existing) {
+        buckets.set(key, { tagSlug, tagLabel, rawPosts: [p] });
+      } else {
+        existing.rawPosts.push(p);
+      }
+    }
+  }
+
+  const seed = new Date().toISOString().slice(0, 10);
+  const keys = Array.from(buckets.keys()).sort(
+    (a, b) => hash32(a + seed) - hash32(b + seed),
+  );
+
+  const primary = keys.filter((k) => (buckets.get(k)?.rawPosts.length ?? 0) >= 2);
+  const secondary = keys.filter((k) => (buckets.get(k)?.rawPosts.length ?? 0) >= 1);
+
+  const picked: string[] = [];
+  for (const k of primary) {
+    if (picked.length >= params.count) break;
+    picked.push(k);
+  }
+  for (const k of secondary) {
+    if (picked.length >= params.count) break;
+    if (!picked.includes(k)) picked.push(k);
+  }
+
+  return picked.map((k) => {
+    const bucket = buckets.get(k)!;
+    const posts = [...bucket.rawPosts].sort(byDateDesc);
+    return {
+      tagSlug: bucket.tagSlug,
+      tagLabel: bucket.tagLabel,
+      posts: toSpotlightPosts(posts),
+    };
+  });
+}
+
 
 export default async function HomePage() {
   const { items } = await content.listPosts({ limit: 120 });
@@ -73,20 +164,19 @@ export default async function HomePage() {
   const gridPosts = latest14.slice(4, 14);
 
   const videosRaw = items.filter((p) => hasTag(p, 'videos'));
-  const commRaw = items.filter((p) => hasTag(p, 'communication'));
-  const sourcesRaw = items.filter((p) => hasTag(p, 'sources'));
+  
 
-  const tagCards: Array<{
-    tagSlug: string;
-    tagLabel: string;
-    posts: TagSpotlightPost[];
-  }> = [
-    { tagSlug: 'videos', tagLabel: 'videos', posts: toSpotlightPosts(videosRaw) },
-    { tagSlug: 'communication', tagLabel: 'communication', posts: toSpotlightPosts(commRaw) },
-    { tagSlug: 'sources', tagLabel: 'sources', posts: toSpotlightPosts(sourcesRaw) },
-  ];
+  const usedSlugs = new Set(latest14.map((p) => p.slug));
 
-  const videoPosts = [...videosRaw].sort(byDateDesc).map(mapPostToVideoGridPost);
+const tagCards = buildRandomSpotlightTagCards({
+  items,
+  usedSlugs,
+  count: 3,
+});
+
+
+ const videosForHomeVideoGrid = await listPostsByTagSlug('videos');
+const videoPosts = videosForHomeVideoGrid.slice(0, 6).map(mapPostToVideoGridPost);
 
   const heroFallback = '/demo/archive/01.jpg';
 

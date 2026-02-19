@@ -1,4 +1,5 @@
 import type { Metadata } from 'next';
+import { draftMode } from 'next/headers';
 import { notFound } from 'next/navigation';
 import { content } from '@/lib/content';
 import { PostStreamReader } from '@/components/post-stream-reader/PostStreamReader';
@@ -60,8 +61,9 @@ export async function generateStaticParams() {
 
 export default async function BlogPostPage({ params }: PageProps) {
   const { slug } = await params;
+  const { isEnabled: isDraftMode } = await draftMode();
 
-  const post = await content.getPostBySlug(slug);
+  const post = await content.getPostBySlug(slug, { includeDraft: isDraftMode });
   if (!post) {
     notFound();
   }
