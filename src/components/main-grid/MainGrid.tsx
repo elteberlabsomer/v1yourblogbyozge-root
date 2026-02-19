@@ -122,7 +122,7 @@ export function MainGrid({ posts, ariaLabel = 'Main grid', className }: Props) {
                       src={coverSrc}
                       alt={coverAlt}
                       fill
-                      sizes="(max-width: 430px) 100vw, (max-width: 1024px) 50vw, 20vw"
+                      sizes="(max-width: 430px) 100vw, 430px"
                       className={styles.img}
                     />
                   ) : (

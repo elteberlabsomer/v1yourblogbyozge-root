@@ -1,4 +1,4 @@
-import type { ContentProvider, GetPostBySlugOptions } from '@/lib/content/provider';
+import type { ContentProvider } from '@/lib/content/provider';
 import type { ListPostsOptions, ListPostsResult, Post } from '@/lib/content/types';
 import { directusAssetUrl } from '@/lib/directus/asset-url';
 
@@ -38,14 +38,6 @@ function requireDirectusBaseUrl(): string {
   }
   return raw.replace(/\/+$/, '');
 }
-function requireDirectusToken(): string {
-  const token = process.env.DIRECTUS_TOKEN;
-  if (!token) {
-    throw new Error('DIRECTUS_TOKEN is not set.');
-  }
-  return token;
-}
-
 
 function asNonEmptyString(value: unknown): string {
   return typeof value === 'string' ? value : '';
@@ -162,47 +154,31 @@ export const directusProvider: ContentProvider = {
     return listPostsPaged(options);
   },
 
- async getPostBySlug(slug: string, options?: GetPostBySlugOptions) {
-  const includeDraft = options?.includeDraft === true;
+  async getPostBySlug(slug) {
+    const params = new URLSearchParams({
+      limit: '1',
+      'filter[slug][_eq]': slug,
+      'filter[status][_eq]': 'published',
+      fields: [
+        'slug',
+        'status',
+        'title',
+        'summary',
+        'content',
+        'date_created',
+        'cover_image',
+        'cover_alt',
+        'topic.slug',
+        'topic.label',
+        'tags.tags_id.slug',
+        'tags.tags_id.label',
+      ].join(','),
+    });
 
-  const params = new URLSearchParams({
-    limit: '1',
-    'filter[slug][_eq]': slug,
-    ...(includeDraft
-      ? { 'filter[status][_in]': 'published,draft' }
-      : { 'filter[status][_eq]': 'published' }),
-    fields: [
-      'slug',
-      'status',
-      'title',
-      'summary',
-      'date_created',
-      'cover_image',
-      'content',
-      'topic.slug',
-      'topic.label',
-      'tags.tags_id.slug',
-      'tags.tags_id.label',
-    ].join(','),
-  });
-
-  const json = await directusFetchJson<DirectusItemsResponse<DirectusPostItem[]>>(
-    `/items/posts?${params.toString()}`,
-    includeDraft
-      ? {
-          headers: {
-            accept: 'application/json',
-            authorization: `Bearer ${requireDirectusToken()}`,
-          },
-          cache: 'no-store',
-        }
-      : undefined
-  );
-
-  const first = json.data?.[0];
-  return first ? mapDirectusToPost(first) : null;
-},
-
+    const json = await directusFetchJson<DirectusItemsResponse<DirectusPostItem[]>>(`/items/posts?${params.toString()}`);
+    const first = json.data?.[0];
+    return first ? mapDirectusToPost(first) : null;
+  },
 
   async listAllSlugs() {
     const pageSize = 200;
