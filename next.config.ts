@@ -21,6 +21,23 @@ const nextConfig: NextConfig = {
       },
     ],
   },
+  async headers() {
+    return [
+      {
+        source: "/blog/:slug*",
+        headers: [
+          {
+            key: "X-Frame-Options",
+            value: "ALLOW-FROM https://cms.yourblogbyosge.com",
+          },
+          {
+            key: "Content-Security-Policy",
+            value: "frame-ancestors 'self' https://cms.yourblogbyosge.com",
+          },
+        ],
+      },
+    ];
+  },
 };
 
 export default nextConfig;
