@@ -49,6 +49,12 @@
   text-decoration-skip-ink: auto;
 }
 
+
+.afterSentinel {
+  width: 100%;
+  height: 1px;
+}
+
 .after {
   max-width: var(--prose-max);
   margin: var(--space-12) auto 0;
@@ -107,4 +113,10 @@
   margin-top: var(--space-16);
   padding-top: var(--space-16);
   border-top: var(--border-width-1) solid var(--border-default);
+}
+
+
+.streamLoading {
+  height: 1px;
+  width: 100%;
 }

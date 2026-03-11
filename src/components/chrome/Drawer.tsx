@@ -31,6 +31,7 @@ export function Drawer({ isOpen, onClose }: DrawerProps) {
         role="dialog"
         aria-modal="true"
         aria-label="Navigation menu"
+        inert={!isOpen ? true : undefined}
       >
         <div className="c-chrome-drawer__top">
           <button
@@ -46,15 +47,15 @@ export function Drawer({ isOpen, onClose }: DrawerProps) {
         </div>
 
         <nav className="c-chrome-drawer__section" aria-label="Primary navigation">
-          <Link href="/" className="c-chrome-drawer__link" onClick={onClose}>
+          <Link prefetch={false} href="/" className="c-chrome-drawer__link" onClick={onClose}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z" stroke="currentColor" strokeWidth="2" />
               <path d="M9 22V12h6v10" stroke="currentColor" strokeWidth="2" />
             </svg>
-            HomePage
+            Home
           </Link>
 
-          <Link href="/topics" className="c-chrome-drawer__link" onClick={onClose}>
+          <Link prefetch={false} href="/topics" className="c-chrome-drawer__link" onClick={onClose}>
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <path d="M4 19.5A2.5 2.5 0 0 1 6.5 17H20" stroke="currentColor" strokeWidth="2" />
               <path d="M6.5 2H20v20H6.5A2.5 2.5 0 0 1 4 19.5v-15A2.5 2.5 0 0 1 6.5 2z" stroke="currentColor" strokeWidth="2" />
@@ -63,10 +64,9 @@ export function Drawer({ isOpen, onClose }: DrawerProps) {
           </Link>
 
           <a
-            href="https://www.google.com"
+            href="https://yourblogbyosge.com/tags/are-you-lucky"
             className="c-chrome-drawer__link c-chrome-drawer__link--lucky"
-            target="_blank"
-            rel="noopener noreferrer"
+          
           >
             <svg width="20" height="20" viewBox="0 0 24 24" fill="none" aria-hidden="true">
               <circle cx="12" cy="12" r="10" stroke="currentColor" strokeWidth="2" />
@@ -75,28 +75,27 @@ export function Drawer({ isOpen, onClose }: DrawerProps) {
             </svg>
             Are You Lucky?
           </a>
-
         </nav>
 
         <div className="c-chrome-drawer__divider" />
 
         <nav className="c-chrome-drawer__section c-chrome-drawer__section--legal" aria-label="Legal">
-          <Link href="/pages/privacy" className="c-chrome-drawer__legalLink" onClick={onClose}>
-  Privacy Policy
+          <Link prefetch={false} href="/pages/privacy" className="c-chrome-drawer__legalLink" onClick={onClose}>
+            Privacy Policy
           </Link>
 
-          <Link href="/pages/cookies" className="c-chrome-drawer__legalLink" onClick={onClose}>
-  Cookie Policy
+          <Link prefetch={false} href="/pages/cookies" className="c-chrome-drawer__legalLink" onClick={onClose}>
+            Cookie Policy
           </Link>
 
-          <Link href="/pages/terms" className="c-chrome-drawer__legalLink" onClick={onClose}>
-  Terms & Conditions
+          <Link prefetch={false} href="/pages/terms" className="c-chrome-drawer__legalLink" onClick={onClose}>
+            Terms & Conditions
           </Link>
 
-          <Link href="/pages/about" className="c-chrome-drawer__legalLink" onClick={onClose}>
+          <Link prefetch={false} href="/pages/about" className="c-chrome-drawer__legalLink" onClick={onClose}>
             About Me
           </Link>
-          <Link href="/pages/contact" className="c-chrome-drawer__legalLink" onClick={onClose}>
+          <Link prefetch={false} href="/pages/contact" className="c-chrome-drawer__legalLink" onClick={onClose}>
             Contact
           </Link>
         </nav>
@@ -105,7 +104,7 @@ export function Drawer({ isOpen, onClose }: DrawerProps) {
 
         <div className="c-chrome-drawer__social">
           <a
-            href="https://twitter.com"
+            href="https://x.com/gulemeyenoske"
             className="c-chrome-socialBtn c-chrome-socialBtn--twitter"
             target="_blank"
             rel="noopener noreferrer"
@@ -115,7 +114,7 @@ export function Drawer({ isOpen, onClose }: DrawerProps) {
           </a>
 
           <a
-            href="https://reddit.com"
+            href="https://www.reddit.com/user/gulemeyenoske/"
             className="c-chrome-socialBtn c-chrome-socialBtn--reddit"
             target="_blank"
             rel="noopener noreferrer"

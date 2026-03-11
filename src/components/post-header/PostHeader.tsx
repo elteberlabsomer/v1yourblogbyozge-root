@@ -1,9 +1,11 @@
-'use client';
-
 import Link from 'next/link';
 import Image from 'next/image';
 import { PostShareActions } from '@/components/post-share-actions/PostShareActions';
+import { resolveImageSrc } from '@/lib/media/resolveImageSrc';
 import styles from './PostHeader.module.css';
+
+const DEFAULT_DETAIL_COVER_SIZES =
+  '(max-width: 430px) calc(100vw - 32px), (max-width: 1024px) min(100vw - 64px, 720px), 720px';
 
 export type PostHeaderProps = {
   authorName: string;
@@ -15,7 +17,27 @@ export type PostHeaderProps = {
   coverSrc: string;
   coverAlt: string;
   shareUrl: string;
+  coverPriority?: boolean;
+  coverSizes?: string;
 };
+
+function tuneCoverImageSrc(src: string | null, prioritize: boolean): string | null {
+  if (!src) {
+    return null;
+  }
+
+  try {
+    const url = new URL(src);
+
+    if (url.pathname.includes('/assets/')) {
+      url.searchParams.set('quality', prioritize ? '72' : '75');
+    }
+
+    return url.toString();
+  } catch {
+    return src;
+  }
+}
 
 function formatDateEn(dateIso: string): string {
   const d = new Date(dateIso);
@@ -28,6 +50,11 @@ function formatDateEn(dateIso: string): string {
 }
 
 export function PostHeader(props: PostHeaderProps) {
+  const optimizedCoverSrc = tuneCoverImageSrc(
+    resolveImageSrc(props.coverSrc, 'cover'),
+    Boolean(props.coverPriority),
+  );
+
   return (
     <header className={styles.header}>
       <div className={styles.meta} aria-label="Post meta">
@@ -76,15 +103,17 @@ export function PostHeader(props: PostHeaderProps) {
 
       <PostShareActions url={props.shareUrl} title={props.title} />
 
-      {props.coverSrc ? (
+      {optimizedCoverSrc ? (
         <figure className={styles.cover}>
           <Image
             className={styles.coverImg}
-            src={props.coverSrc}
+            src={optimizedCoverSrc}
             alt={props.coverAlt}
-            width={1200}
-            height={675}
-            priority
+            fill
+            unoptimized
+            priority={Boolean(props.coverPriority)}
+            fetchPriority={props.coverPriority ? 'high' : 'auto'}
+            sizes={props.coverSizes ?? DEFAULT_DETAIL_COVER_SIZES}
           />
         </figure>
       ) : null}

@@ -153,7 +153,7 @@ export default async function TopicDetailPage({ params }: PageProps) {
   });
 
   const tagPool = Array.from(tagMap.values());
-  const eligible = tagPool.filter((t) => t.count >= 2);
+  const eligible = tagPool.filter((t) => t.count >= 3);
   const pool = eligible.length >= 3 ? eligible : tagPool;
 
   const spotlightTags = pickRandom(pool, 3, hashSeed(slug));

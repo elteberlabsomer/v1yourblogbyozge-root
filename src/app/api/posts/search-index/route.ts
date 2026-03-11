@@ -1,6 +1,15 @@
+import { unstable_cache } from 'next/cache';
 import { NextResponse } from 'next/server';
 
-export const dynamic = 'force-dynamic';
+const SEARCH_CACHE_CONTROL = 'public, s-maxage=300, stale-while-revalidate=1800';
+
+function searchHeaders(): HeadersInit {
+  return {
+    'Cache-Control': SEARCH_CACHE_CONTROL,
+    'CDN-Cache-Control': SEARCH_CACHE_CONTROL,
+    'Vercel-CDN-Cache-Control': SEARCH_CACHE_CONTROL,
+  };
+}
 
 type SearchItem = {
   slug: string;
@@ -19,19 +28,19 @@ function clampLimit(limitRaw: string | null) {
   return Math.floor(n);
 }
 
-export async function GET(req: Request) {
-  const url = new URL(req.url);
-  const qRaw = url.searchParams.get('q') ?? '';
-  const q = qRaw.trim();
-  const limit = clampLimit(url.searchParams.get('limit'));
+function normalizeQuery(input: string): string {
+  return input.trim().replace(/\s+/g, ' ');
+}
 
+async function fetchSearchResults(query: string, limit: number): Promise<SearchItem[]> {
+  const q = normalizeQuery(query);
   if (!q) {
-    return NextResponse.json({ items: [] as SearchItem[] });
+    return [];
   }
 
   const base = process.env.DIRECTUS_URL ?? process.env.NEXT_PUBLIC_DIRECTUS_URL;
   if (!base) {
-    return NextResponse.json({ items: [] as SearchItem[], error: 'DIRECTUS_URL is not set.' }, { status: 500 });
+    throw new Error('DIRECTUS_URL is not set.');
   }
 
   const params = new URLSearchParams();
@@ -47,20 +56,42 @@ export async function GET(req: Request) {
 
   const res = await fetch(endpoint, {
     headers: { Accept: 'application/json' },
-    cache: 'no-store',
+    next: { revalidate: 300 },
   });
 
   if (!res.ok) {
-    return NextResponse.json(
-      { items: [] as SearchItem[], error: `Directus request failed (${res.status}).` },
-      { status: 502 },
-    );
+    throw new Error(`Directus request failed (${res.status}).`);
   }
 
   const json = (await res.json()) as DirectusItemsResponse<Array<{ slug?: string; title?: string }>>;
-  const items: SearchItem[] = (json.data ?? [])
+  return (json.data ?? [])
     .map((x) => ({ slug: String(x.slug ?? ''), title: String(x.title ?? '') }))
     .filter((x) => x.slug.length > 0 && x.title.length > 0);
+}
 
-  return NextResponse.json({ items });
+export async function GET(req: Request) {
+  const url = new URL(req.url);
+  const q = normalizeQuery(url.searchParams.get('q') ?? '');
+  const limit = clampLimit(url.searchParams.get('limit'));
+
+  if (!q) {
+    return NextResponse.json({ items: [] as SearchItem[] }, { headers: searchHeaders() });
+  }
+
+  try {
+    const items = await unstable_cache(
+      async () => fetchSearchResults(q, limit),
+      ['search-index', q.toLowerCase(), String(limit)],
+      { revalidate: 300, tags: ['search:index'] },
+    )();
+
+    return NextResponse.json({ items }, { headers: searchHeaders() });
+  } catch (error) {
+    const message = error instanceof Error ? error.message : 'Search request failed.';
+
+    return NextResponse.json(
+      { items: [] as SearchItem[], error: message },
+      { status: message.includes('DIRECTUS_URL') ? 500 : 502, headers: searchHeaders() },
+    );
+  }
 }

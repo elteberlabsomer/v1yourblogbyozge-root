@@ -2,16 +2,17 @@
 
 import { NewsletterSignup } from '../newsletter-signup/NewsletterSignup';
 
-function sleep(ms: number) {
-  return new Promise<void>((resolve) => {
-    window.setTimeout(() => resolve(), ms);
-  });
-}
-
 export function HomeNewsletterSignup() {
   async function handleSubmit(email: string) {
-    void email;
-    await sleep(450);
+    const res = await fetch('/api/newsletter', {
+      method: 'POST',
+      headers: { 'content-type': 'application/json' },
+      body: JSON.stringify({ email }),
+    });
+
+    if (!res.ok) {
+      throw new Error('Failed to subscribe.');
+    }
   }
 
   return <NewsletterSignup onSubmit={handleSubmit} />;

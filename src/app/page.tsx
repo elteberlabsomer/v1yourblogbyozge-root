@@ -6,13 +6,39 @@ import { QuoteSpotlight } from '@/components/quote-spotlight/QuoteSpotlight';
 import { MainGrid, type MainGridPost } from '@/components/main-grid/MainGrid';
 import { SocialMediaCard } from '@/components/social-media-card/SocialMediaCard';
 import { VideoGrid, type VideoGridPost } from '@/components/video-grid/VideoGrid';
-import { NewsletterSignupDemo } from '@/components/newsletter-signup/NewsletterSignupDemo';
-import { TagSpotlight, type TagSpotlightPost } from '@/components/tag-spotlight/TagSpotlight';
+import { HomeNewsletterSignup } from '@/components/home/HomeNewsletterSignup';
+import { TagSpotlightSection } from '@/components/tag-spotlight/TagSpotlightSection';
+
 
 import styles from './page.module.css';
+export const revalidate = 900;
 
+const SIX_HOURS_MS = 15 * 60 * 1000;
+const TAG_SPOTLIGHT_MIN_POSTS = 2;
+const TAG_SPOTLIGHT_COLUMNS = 3;
+const TAG_SPOTLIGHT_TOP_POOL = 24;
+
+function mulberry32(seed: number) {
+  let t = seed >>> 0;
+  return function () {
+    t += 0x6D2B79F5;
+    let r = Math.imul(t ^ (t >>> 15), 1 | t);
+    r ^= r + Math.imul(r ^ (r >>> 7), 61 | r);
+    return ((r ^ (r >>> 14)) >>> 0) / 4294967296;
+  };
+}
+
+function seededShuffle<T>(arr: T[], seed: number): T[] {
+  const rand = mulberry32(seed);
+  const out = arr.slice();
+  for (let i = out.length - 1; i > 0; i--) {
+    const j = Math.floor(rand() * (i + 1));
+    [out[i], out[j]] = [out[j], out[i]];
+  }
+  return out;
+}
 const AVATAR =
-  'https://pbs.twimg.com/profile_images/1967148637877608448/sY1X17Wg_400x400.jpg';
+  'https://cms.yourblogbyosge.com/assets/e5279d49-8702-4f0a-9b09-2b156224ffb7?width=128&height=128&fit=cover&quality=75&format=avif';
 
 function parseDateIso(dateIso?: string) {
   if (!dateIso) {
@@ -48,7 +74,7 @@ function mapPostToVideoGridPost(p: Post): VideoGridPost {
 }
 
 function toSpotlightPosts(raw: Post[]) {
-  const posts: TagSpotlightPost[] = [...raw]
+  const posts = [...raw]
     .sort(byDateDesc)
     .map((p) => ({
       slug: p.slug,
@@ -60,38 +86,50 @@ function toSpotlightPosts(raw: Post[]) {
   return posts;
 }
 
+function normalizeSlug(input: unknown): string {
+  return typeof input === 'string' ? input.trim().toLowerCase() : '';
+}
+
 function hasTag(post: Post, tagSlug: string) {
   const tags = Array.isArray(post.tags) ? post.tags : [];
-  return tags.some((t) => t.slug === tagSlug);
+  const needle = normalizeSlug(tagSlug);
+  return tags.some((t) => normalizeSlug((t as any)?.slug) === needle);
 }
 
 export default async function HomePage() {
-  const { items } = await content.listPosts({ limit: 120 });
+  const { items } = await content.listPosts({ limit: 240 });
 
   const latest14 = items.slice(0, 14);
   const heroPosts = latest14.slice(0, 4);
   const gridPosts = latest14.slice(4, 14);
 
   const videosRaw = items.filter((p) => hasTag(p, 'videos'));
-  const commRaw = items.filter((p) => hasTag(p, 'communication'));
-  const sourcesRaw = items.filter((p) => hasTag(p, 'sources'));
 
-  const tagCards: Array<{
-    tagSlug: string;
-    tagLabel: string;
-    posts: TagSpotlightPost[];
-  }> = [
-    { tagSlug: 'videos', tagLabel: 'videos', posts: toSpotlightPosts(videosRaw) },
-    { tagSlug: 'communication', tagLabel: 'communication', posts: toSpotlightPosts(commRaw) },
-    { tagSlug: 'sources', tagLabel: 'sources', posts: toSpotlightPosts(sourcesRaw) },
-  ];
+  const latestSlugs = new Set(latest14.map((p) => p.slug));
 
-  const videoPosts = [...videosRaw].sort(byDateDesc).map(mapPostToVideoGridPost);
+  const spotlightPool = items.filter((p) => !latestSlugs.has(p.slug));
 
-  const heroFallback = '/demo/archive/01.jpg';
+  const spotlightPosts = spotlightPool.map((p) => ({
+    slug: p.slug,
+    title: p.title,
+    coverSrc: p.cover?.src ?? '',
+    coverAlt: p.cover?.alt ?? p.title,
+    tags: Array.isArray(p.tags)
+      ? p.tags.map((t: any) => ({
+          slug: String(t?.slug ?? '').trim(),
+          label: String(t?.label ?? '').trim(),
+        }))
+      : [],
+  }));
+
+  const videosForHome = videosRaw.filter((p) => !latestSlugs.has(p.slug));
+  const videoPosts = [...videosForHome].sort(byDateDesc).map(mapPostToVideoGridPost);
+
+  const showVideoSection = videoPosts.length > 1;
 
   return (
-    <main className={styles.page}>
+    <div className={styles.page}>
+
       {/* 4-up hero (full-bleed) */}
       <section className={styles.hero} aria-label="Hero">
         <div className={styles.tiles} aria-label="Hero tiles">
@@ -101,7 +139,7 @@ export default async function HomePage() {
                 ? { label: post.topic.label, href: `/topics/${post.topic.slug}` }
                 : undefined;
 
-            const imageSrc = post.cover?.src && post.cover.src.length > 0 ? post.cover.src : heroFallback;
+            const imageSrc = post.cover?.src && post.cover.src.length > 0 ? post.cover.src : '/demo/archive/01.jpg';
             const imageAlt = post.cover?.alt && post.cover.alt.length > 0 ? post.cover.alt : post.title;
 
             return (
@@ -122,14 +160,14 @@ export default async function HomePage() {
 
       {/* QuoteSpotlight (inside 1280 container) */}
       <div className="l-section" aria-label="Quote spotlight">
-        <div className="l-container">
+        <div className={`l-container ${styles.deferredSection}`}>
           <QuoteSpotlight />
         </div>
       </div>
 
       {/* 10-up main grid (inside 1280 container) */}
       <section className="l-section" aria-label="Latest posts">
-        <div className="l-container">
+        <div className={`l-container ${styles.deferredSection}`}>
           <MainGrid
             posts={gridPosts.map(mapPostToMainGridPost)}
             ariaLabel="Latest posts"
@@ -140,12 +178,12 @@ export default async function HomePage() {
 
       {/* Social (inside 960 container) */}
       <section className="l-section" aria-label="Social media">
-        <div className="l-container">
+        <div className={`l-container ${styles.deferredSection}`}>
           <div className={styles.socialNarrow}>
             <div className={styles.socialGrid} aria-label="Social media">
               <SocialMediaCard
                 variant="twitter"
-                href="https://twitter.com/gulemeyenoske"
+                href="https://x.com/gulemeyenoske"
                 handle="@gulemeyenoske"
                 subtitle="Follow me on Twitter"
                 avatarSrc={AVATAR}
@@ -155,7 +193,7 @@ export default async function HomePage() {
 
               <SocialMediaCard
                 variant="reddit"
-                href="https://reddit.com/user/gulemeyenoske"
+                href="https://www.reddit.com/user/gulemeyenoske/"
                 handle="u/gulemeyenoske"
                 subtitle="Join me on Reddit"
                 avatarSrc={AVATAR}
@@ -168,41 +206,35 @@ export default async function HomePage() {
       </section>
 
       {/* VideoGrid (same shell + layout rules as dev page) */}
-      <section className="l-section" aria-label="Featured videos">
-        <div className="l-container">
-          <div className={styles.videoPanel}>
-            <header className={styles.videoHeader}>
-              <h2 className={styles.videoTitle}>FEATURED VIDEOS</h2>
-            </header>
+      {showVideoSection ? (
+        <section className="l-section" aria-label="Featured videos">
+          <div className={`l-container ${styles.deferredSection}`}>
+            <div className={styles.videoPanel}>
+              <header className={styles.videoHeader}>
+                <h2 className={styles.videoTitle}>FEATURED VIDEOS</h2>
+              </header>
 
-            <div className={styles.videoShell}>
-              <VideoGrid posts={videoPosts} limit={6} />
+              <div className={styles.videoShell}>
+                <VideoGrid posts={videoPosts} limit={6} />
+              </div>
             </div>
           </div>
-        </div>
-      </section>
+        </section>
+      ) : null}
 
       <section className="l-section" aria-label="Newsletter signup">
-        <div className="l-container">
-          <NewsletterSignupDemo />
+        <div className={`l-container ${styles.deferredSection}`}>
+          <HomeNewsletterSignup />
         </div>
       </section>
 
       <section className="l-section" aria-label="Tag spotlight">
-        <div className="l-container">
+        <div className={`l-container ${styles.deferredSection}`}>
           <div className={styles.tagGrid} aria-label="Tags">
-            {tagCards.map((c) => (
-              <TagSpotlight
-                key={c.tagSlug}
-                tagSlug={c.tagSlug}
-                tagLabel={c.tagLabel}
-                posts={c.posts}
-                limit={4}
-              />
-            ))}
+            <TagSpotlightSection posts={spotlightPosts} />
           </div>
         </div>
       </section>
-    </main>
+    </div>
   );
 }

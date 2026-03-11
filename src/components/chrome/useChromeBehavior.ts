@@ -191,7 +191,11 @@ export function useChromeBehavior() {
   }, [state.overlay]);
 
   useEffect(() => {
-    const handleScroll = () => {
+    let ticking = false;
+
+    const updateFromScroll = () => {
+      ticking = false;
+
       const s = stateRef.current;
       const y = window.scrollY;
 
@@ -217,6 +221,9 @@ export function useChromeBehavior() {
       }
 
       const delta = y - lastScrollY.current;
+      if (delta === 0) {
+        return;
+      }
 
       let dir: 1 | -1 | 0 = 0;
       if (delta > 0) {
@@ -245,6 +252,14 @@ export function useChromeBehavior() {
       }
 
       lastScrollY.current = y;
+    };
+
+    const handleScroll = () => {
+      if (ticking) {
+        return;
+      }
+      ticking = true;
+      window.requestAnimationFrame(updateFromScroll);
     };
 
     window.addEventListener('scroll', handleScroll, { passive: true });

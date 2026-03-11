@@ -141,7 +141,6 @@
   }
 }
 
-
 /* Tablet: 431–1024 */
 @media (min-width: 431px) and (max-width: 1024px) {
   .tiles {
@@ -163,5 +162,20 @@
   .videoShell :global([data-video-grid-list]) {
     height: auto;
     grid-template-rows: none;
+  }
+
+  .page :global([aria-label='Quote spotlight']) {
+    display: none;
+  }
+}
+
+.deferredSection {
+  content-visibility: auto;
+  contain-intrinsic-size: 1px 960px;
+}
+
+@media (max-width: 430px) {
+  .deferredSection {
+    contain-intrinsic-size: 1px 720px;
   }
 }

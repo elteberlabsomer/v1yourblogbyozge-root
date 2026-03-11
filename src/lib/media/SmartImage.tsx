@@ -13,7 +13,7 @@ type Props = {
 };
 
 export function SmartImage({ src, alt, variant, priority }: Props) {
-  const resolved = resolveImageSrc(src);
+  const resolved = resolveImageSrc(src, variant);
   if (!resolved) {
     return null;
   }

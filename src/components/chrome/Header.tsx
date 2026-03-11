@@ -28,22 +28,21 @@ export function Header({
           <span className="c-chrome-hamburger__bar" />
         </button>
 
-        <Link href="/" className="c-chrome-brand" aria-label="Home">
+        <Link href="/" className="c-chrome-brand" aria-label="Home" onClick={() => window.scrollTo(0, 0)}>
           <span className="c-chrome-brand__mark">YourBlog</span>
         </Link>
 
         <nav className="c-chrome-nav" aria-label="Primary navigation">
-          <Link href="/" className="c-chrome-nav__link">
-            HomePage
+          <Link href="/" className="c-chrome-nav__link" onClick={() => window.scrollTo(0, 0)}>
+            Home
           </Link>
           <Link href="/topics" className="c-chrome-nav__link">
             Topics
           </Link>
           <a
-            href="https://www.google.com"
+            href="https://yourblogbyosge.com/tags/are-you-lucky"
             className="c-chrome-nav__link c-chrome-nav__link--lucky"
-            target="_blank"
-            rel="noopener noreferrer"
+            
           >
             Are You Lucky?
           </a>

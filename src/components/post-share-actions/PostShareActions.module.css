@@ -3,7 +3,7 @@
 .shareButtons {
   display: flex;
   gap: var(--space-3);
-  margin-bottom: var(--space-6);
+  margin-bottom: var(--space-0);
   flex-wrap: nowrap;
   align-items: center;
 }

@@ -1,0 +1,87 @@
+.page {
+  padding: 2rem 0 4rem;
+}
+
+.section {
+  margin-bottom: 2.5rem;
+  border-bottom: 1px solid var(--color-border, #e5e5e5);
+  padding-bottom: 2rem;
+}
+
+.section:last-child {
+  border-bottom: none;
+}
+
+.topicTitle {
+  font-size: 1.125rem;
+  font-weight: 700;
+  margin: 0 0 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.04em;
+}
+
+.topicLink {
+  color: inherit;
+  text-decoration: none;
+}
+
+.topicLink:hover {
+  text-decoration: underline;
+}
+
+.postList {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.postItem {
+  display: flex;
+  gap: 0.5rem;
+  align-items: baseline;
+  padding: 0.25rem 0;
+  font-size: 0.9375rem;
+}
+
+.idx {
+  color: var(--color-text-muted, #999);
+  min-width: 1.5rem;
+  flex-shrink: 0;
+  font-variant-numeric: tabular-nums;
+}
+
+.postMain {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: baseline;
+  gap: 0.25rem 0.5rem;
+  min-width: 0;
+}
+
+.postLink {
+  color: var(--color-text, #111);
+  text-decoration: none;
+  line-height: 1.4;
+}
+
+.postLink:hover {
+  text-decoration: underline;
+}
+
+.tagList {
+  display: inline-flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.25rem;
+}
+
+.tagLink {
+  color: var(--color-text-muted, #777);
+  text-decoration: none;
+  font-size: 0.75rem;
+  line-height: 1.2;
+}
+
+.tagLink:hover {
+  text-decoration: underline;
+}

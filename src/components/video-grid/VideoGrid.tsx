@@ -1,6 +1,8 @@
 import Image from 'next/image';
 import Link from 'next/link';
 
+import { directusAssetUrl } from '@/lib/directus/asset-url';
+
 import styles from './VideoGrid.module.css';
 
 export type VideoGridPost = {
@@ -19,7 +21,13 @@ type VideoGridProps = {
 };
 
 function resolveCoverSrc(post: { coverSrc?: string }, fallbackSrc: string) {
-  return post.coverSrc && post.coverSrc.length > 0 ? post.coverSrc : fallbackSrc;
+  const raw = post.coverSrc && post.coverSrc.length > 0 ? post.coverSrc : fallbackSrc;
+  return directusAssetUrl(raw, { variant: 'cover' });
+}
+
+function resolveRowCoverSrc(post: { coverSrc?: string }, fallbackSrc: string) {
+  const raw = post.coverSrc && post.coverSrc.length > 0 ? post.coverSrc : fallbackSrc;
+  return directusAssetUrl(raw, { variant: 'thumb' });
 }
 
 function resolveCoverAlt(post: { coverAlt?: string; title: string }) {
@@ -85,7 +93,8 @@ export function VideoGrid({ posts, limit = 6 }: VideoGridProps) {
             src={resolveCoverSrc(featured, fallbackCoverSrc)}
             alt={resolveCoverAlt(featured)}
             fill
-            priority
+            unoptimized
+            priority={false}
             className={styles.heroImg}
             sizes="(max-width: 430px) 100vw, (max-width: 1024px) 100vw, 60vw"
           />
@@ -125,9 +134,10 @@ export function VideoGrid({ posts, limit = 6 }: VideoGridProps) {
             <li key={post.slug} data-video-grid-row className={styles.row}>
               <div className={styles.rowMedia}>
                 <Image
-                  src={resolveCoverSrc(post, fallbackCoverSrc)}
+                  src={resolveRowCoverSrc(post, fallbackCoverSrc)}
                   alt={resolveCoverAlt(post)}
                   fill
+                  unoptimized
                   className={styles.rowImg}
                   sizes="240px"
                 />

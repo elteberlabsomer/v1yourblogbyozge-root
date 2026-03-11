@@ -1,5 +1,3 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -29,7 +27,7 @@ export function PostWallSquare({
   badge,
   priority = false,
 }: PostWallSquareProps) {
-  const src = directusAssetUrl(imageSrc, { key: 'square' });
+  const src = directusAssetUrl(imageSrc, { variant: 'square' });
 
   return (
     <article className={styles.root}>
@@ -38,6 +36,7 @@ export function PostWallSquare({
           src={src}
           alt={imageAlt ?? title}
           fill
+          unoptimized
           className={styles.img}
           sizes="(max-width: 430px) 100vw, (max-width: 1024px) 50vw, 25vw"
           priority={priority}

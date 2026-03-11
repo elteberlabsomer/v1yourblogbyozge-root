@@ -1,4 +1,3 @@
-// TagSpotlight.tsx
 import Image from 'next/image';
 import Link from 'next/link';
 
@@ -19,7 +18,7 @@ type BaseProps = {
   titleHref: string;
   titleText: string;
   posts: TagSpotlightPost[];
-  limit?: number; // includes featured
+  limit?: number;
   dataAttr: string;
 };
 
@@ -27,14 +26,14 @@ type TagProps = {
   tagSlug: string;
   tagLabel: string;
   posts: TagSpotlightPost[];
-  limit?: number; // includes featured
+  limit?: number;
 };
 
 type TopicProps = {
   topicSlug: string;
   topicLabel: string;
   posts: TopicSpotlightPost[];
-  limit?: number; // includes featured
+  limit?: number;
 };
 
 function toText(value: unknown) {
@@ -53,17 +52,13 @@ function pickCoverAlt(post: TagSpotlightPost) {
 
 function toHashtag(label: string) {
   const t = label.trim();
-  if (!t) {
-    return '#TAG';
-  }
+  if (!t) return '#TAG';
   return `#${t.toUpperCase()}`;
 }
 
 function toTopicTitle(label: string) {
   const t = label.trim();
-  if (!t) {
-    return 'TOPIC';
-  }
+  if (!t) return 'TOPIC';
   return t.toUpperCase();
 }
 
@@ -83,7 +78,7 @@ function BaseSpotlight({ titleHref, titleText, posts, limit = 4, dataAttr }: Bas
   const fallbackCoverSrc = '/demo/archive/01.jpg';
 
   const rawBgSrc = featuredCoverSrc.length > 0 ? featuredCoverSrc : fallbackCoverSrc;
-  const bgSrc = directusAssetUrl(rawBgSrc, { key: 'portrait' });
+  const bgSrc = directusAssetUrl(rawBgSrc, { variant: 'cover' });
 
   return (
     <article className={styles.root} data-spotlight={dataAttr}>
@@ -92,8 +87,9 @@ function BaseSpotlight({ titleHref, titleText, posts, limit = 4, dataAttr }: Bas
           src={bgSrc}
           alt={featuredCoverAlt}
           fill
+          unoptimized
           className={styles.img}
-          sizes="(max-width: 430px) 100vw, 420px"
+          sizes="(max-width: 430px) 100vw, (max-width: 1024px) calc(50vw - 24px), 380px"
         />
         <div className={styles.scrim} aria-hidden="true" />
       </div>

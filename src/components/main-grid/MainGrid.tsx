@@ -1,7 +1,7 @@
-'use client';
-
 import Image from 'next/image';
 import Link from 'next/link';
+
+import { directusAssetUrl } from '@/lib/directus/asset-url';
 
 import styles from './MainGrid.module.css';
 
@@ -10,14 +10,10 @@ type CoverLike = { src?: string | null; alt?: string | null };
 export type MainGridPost = {
   slug: string;
   title: string;
-
   categoryLabel?: string | null;
   topicSlug?: string | null;
-
   topic?: { label?: string | null; slug?: string | null } | null;
-
   cover?: CoverLike | null;
-
   coverSrc?: string | null;
   coverAlt?: string | null;
 };
@@ -34,66 +30,47 @@ function toText(value: unknown) {
 
 function pickCoverSrc(post: MainGridPost) {
   const a = toText(post.cover?.src);
-  if (a.length > 0) {
-    return a;
-  }
+  if (a.length > 0) return a;
 
   const b = toText(post.coverSrc);
-  if (b.length > 0) {
-    return b;
-  }
+  if (b.length > 0) return b;
 
   return '';
 }
 
 function pickCoverAlt(post: MainGridPost) {
   const a = toText(post.cover?.alt);
-  if (a.length > 0) {
-    return a;
-  }
+  if (a.length > 0) return a;
 
   const b = toText(post.coverAlt);
-  if (b.length > 0) {
-    return b;
-  }
+  if (b.length > 0) return b;
 
   return post.title;
 }
 
 function pickCategory(post: MainGridPost) {
   const a = toText(post.categoryLabel);
-  if (a.length > 0) {
-    return a;
-  }
+  if (a.length > 0) return a;
 
   const b = toText(post.topic?.label);
-  if (b.length > 0) {
-    return b;
-  }
+  if (b.length > 0) return b;
 
   return '';
 }
 
 function pickTopicSlug(post: MainGridPost) {
   const a = toText(post.topicSlug);
-  if (a.length > 0) {
-    return a;
-  }
+  if (a.length > 0) return a;
 
   const b = toText(post.topic?.slug);
-  if (b.length > 0) {
-    return b;
-  }
+  if (b.length > 0) return b;
 
   return '';
 }
 
 function pickCategoryHref(post: MainGridPost) {
   const topicSlug = pickTopicSlug(post);
-  if (topicSlug.length > 0) {
-    return `/topics/${topicSlug}`;
-  }
-  return '';
+  return topicSlug.length > 0 ? `/topics/${topicSlug}` : '';
 }
 
 export function MainGrid({ posts, ariaLabel = 'Main grid', className }: Props) {
@@ -103,7 +80,8 @@ export function MainGrid({ posts, ariaLabel = 'Main grid', className }: Props) {
   return (
     <ul className={rootClassName} aria-label={ariaLabel}>
       {safePosts.map((post) => {
-        const coverSrc = pickCoverSrc(post);
+        const rawCoverSrc = pickCoverSrc(post);
+        const coverSrc = directusAssetUrl(rawCoverSrc, { variant: 'thumb' });
         const coverAlt = pickCoverAlt(post);
         const category = pickCategory(post);
         const categoryHref = pickCategoryHref(post);
@@ -122,7 +100,8 @@ export function MainGrid({ posts, ariaLabel = 'Main grid', className }: Props) {
                       src={coverSrc}
                       alt={coverAlt}
                       fill
-                      sizes="(max-width: 430px) 100vw, 430px"
+                      unoptimized
+                      sizes="(max-width: 430px) 100vw, (max-width: 1024px) calc(50vw - 24px), 225px"
                       className={styles.img}
                     />
                   ) : (

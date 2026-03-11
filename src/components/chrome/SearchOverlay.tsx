@@ -24,6 +24,10 @@ type ApiResponse = {
 
 const MAX_RESULTS = 8;
 
+function normalizeQueryKey(value: string) {
+  return value.trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
 function toPostHref(slug: string) {
   return `/blog/${slug}`;
 }
@@ -34,6 +38,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
   const overlayRef = useRef<HTMLDivElement | null>(null);
   const inputRef = useRef<HTMLInputElement | null>(null);
   const abortRef = useRef<AbortController | null>(null);
+  const resultsCacheRef = useRef(new Map<string, SearchItem[]>());
 
   useFocusTrap(overlayRef, isOpen);
 
@@ -81,6 +86,7 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
     if (!isOpen) return;
 
     const q = query.trim();
+    const queryKey = normalizeQueryKey(q);
 
     if (!q) {
       abortRef.current?.abort();
@@ -88,6 +94,15 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
       setResults([]);
       setIsLoading(false);
       setError(null);
+      return;
+    }
+
+    const cached = resultsCacheRef.current.get(queryKey);
+    if (cached) {
+      setResults(cached);
+      setIsLoading(false);
+      setError(null);
+      setActiveIndex(0);
       return;
     }
 
@@ -102,7 +117,6 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
       try {
         const res = await fetch(`/api/posts/search-index?q=${encodeURIComponent(q)}&limit=${MAX_RESULTS}` as const, {
           signal: ac.signal,
-          cache: 'no-store',
         });
 
         const json = (await res.json()) as ApiResponse;
@@ -114,8 +128,9 @@ export function SearchOverlay({ isOpen, onClose }: SearchOverlayProps) {
           return;
         }
 
-        const next = Array.isArray(json.items) ? json.items : [];
-        setResults(next.slice(0, MAX_RESULTS));
+        const next = Array.isArray(json.items) ? json.items.slice(0, MAX_RESULTS) : [];
+        resultsCacheRef.current.set(queryKey, next);
+        setResults(next);
         setIsLoading(false);
         setActiveIndex(0);
       } catch (e) {

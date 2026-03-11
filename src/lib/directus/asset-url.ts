@@ -1,6 +1,14 @@
 type AssetUrlOptions = {
-  key?: string;
+  key?: string;  // Deprecated - use variant instead
+  variant?: 'cover' | 'thumb' | 'square' | 'inline';
 };
+
+const DIRECTUS_TRANSFORMS = {
+  cover: 'width=1200&quality=80&format=webp',
+  thumb: 'width=400&height=300&fit=cover&quality=75&format=webp',
+  square: 'width=600&height=600&fit=cover&quality=75&format=webp',
+  inline: 'width=800&quality=80&format=webp',
+} as const;
 
 function getDirectusBaseUrl(): string {
   const raw = process.env.NEXT_PUBLIC_DIRECTUS_URL ?? process.env.DIRECTUS_URL ?? '';
@@ -9,6 +17,21 @@ function getDirectusBaseUrl(): string {
 
 function looksLikeUuid(value: string): boolean {
   return /^[0-9a-f]{8}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{4}-[0-9a-f]{12}$/i.test(value);
+}
+
+function applyTransform(url: URL, variant?: 'cover' | 'thumb' | 'square' | 'inline'): void {
+  if (!variant) return;
+  
+  const transform = DIRECTUS_TRANSFORMS[variant];
+  const params = new URLSearchParams(transform);
+  
+  // Remove old key parameter if exists
+  url.searchParams.delete('key');
+  
+  // Apply new transform parameters
+  params.forEach((value, key) => {
+    url.searchParams.set(key, value);
+  });
 }
 
 /**
@@ -22,7 +45,7 @@ export function directusAssetUrl(input: string | null | undefined, options?: Ass
     return '';
   }
 
-  const key = options?.key;
+  const { key, variant } = options || {};
 
   // Local/static paths
   if (input.startsWith('/')) {
@@ -31,15 +54,16 @@ export function directusAssetUrl(input: string | null | undefined, options?: Ass
 
   // Full URL (directus assets or anything else)
   if (input.startsWith('http://') || input.startsWith('https://')) {
-    if (!key) {
-      return input;
-    }
-
     try {
       const url = new URL(input);
       // Only rewrite if it is an /assets/* URL
       if (url.pathname.includes('/assets/')) {
-        url.searchParams.set('key', key);
+        if (variant) {
+          applyTransform(url, variant);
+        } else if (key) {
+          // Fallback to old key system for backward compatibility
+          url.searchParams.set('key', key);
+        }
         return url.toString();
       }
       return input;
@@ -56,7 +80,10 @@ export function directusAssetUrl(input: string | null | undefined, options?: Ass
     }
 
     const url = new URL(`${base}/assets/${input}`);
-    if (key) {
+    if (variant) {
+      applyTransform(url, variant);
+    } else if (key) {
+      // Fallback to old key system
       url.searchParams.set('key', key);
     }
     return url.toString();

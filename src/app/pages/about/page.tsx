@@ -10,7 +10,7 @@ export const metadata: Metadata = {
 };
 
 const AVATAR =
-  'https://pbs.twimg.com/profile_images/1967148637877608448/sY1X17Wg_400x400.jpg';
+  'https://cms.yourblogbyosge.com/assets/e5279d49-8702-4f0a-9b09-2b156224ffb7?width=128&height=128&fit=cover&quality=75&format=avif';
 
 export default function AboutPage() {
   return (

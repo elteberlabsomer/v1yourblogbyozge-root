@@ -1,4 +1,7 @@
+'use client';
+
 import Link from 'next/link';
+import { useRouter, usePathname } from 'next/navigation';
 import { TwitterIcon } from './icons/TwitterIcon';
 import { RedditIcon } from './icons/RedditIcon';
 
@@ -30,6 +33,16 @@ const PAGES = [
 ];
 
 export function Footer() {
+  const router = useRouter();
+  const pathname = usePathname();
+
+  const handleTopicClick = (e: React.MouseEvent<HTMLAnchorElement>, href: string) => {
+    if (pathname === href) {
+      e.preventDefault();
+      router.refresh();
+    }
+  };
+
   return (
     <footer className="c-chrome-footer" aria-label="Footer">
       <div className="c-chrome-footer__container">
@@ -66,7 +79,13 @@ export function Footer() {
           <nav className="c-chrome-footer__column" aria-label="Topics 1">
             <div className="c-chrome-footer__title">Topics</div>
             {TOPICS_COL1.map((item) => (
-              <Link key={item.href} href={item.href} className="c-chrome-footer__link">
+              <Link 
+                key={item.href} 
+                href={item.href} 
+                className="c-chrome-footer__link"
+                prefetch={false}
+                onClick={(e) => handleTopicClick(e, item.href)}
+              >
                 {item.label}
               </Link>
             ))}
@@ -80,7 +99,13 @@ export function Footer() {
               Topics
             </div>
             {TOPICS_COL2.map((item) => (
-              <Link key={item.href} href={item.href} className="c-chrome-footer__link">
+              <Link 
+                key={item.href} 
+                href={item.href} 
+                className="c-chrome-footer__link"
+                prefetch={false}
+                onClick={(e) => handleTopicClick(e, item.href)}
+              >
                 {item.label}
               </Link>
             ))}
@@ -104,7 +129,7 @@ export function Footer() {
             <div className="c-chrome-footer__columnDivider" />
 
             {PAGES.map((item) => (
-              <Link key={item.href} href={item.href} className="c-chrome-footer__link">
+              <Link key={item.href} href={item.href} className="c-chrome-footer__link" prefetch={false}>
                 {item.label}
               </Link>
             ))}
@@ -112,7 +137,7 @@ export function Footer() {
         </div>
 
         <div className="c-chrome-footer__bottom">
-          <p className="c-chrome-footer__copyright">© 2026 Blog. All rights reserved.</p>
+          <p className="c-chrome-footer__copyright">© © 2026 YourBlog. All rights reserved.</p>
           <div className="c-chrome-footer__bottomLinks">
             <a href="/sitemap.xml" className="c-chrome-footer__bottomLink">
               Sitemap

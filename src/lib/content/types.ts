@@ -3,7 +3,7 @@ export type ContentRef = {
   label: string;
 };
 
-export type PostBodyBlock = 
+export type PostBodyBlock =
   | { kind: 'p' | 'h2'; text: string }
   | { kind: 'html'; html: string };
 
@@ -30,4 +30,5 @@ export type ListPostsResult = {
 export type ListPostsOptions = {
   limit?: number;
   offset?: number;
+  includeBody?: boolean;
 };

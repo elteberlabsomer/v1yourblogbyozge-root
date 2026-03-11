@@ -1,5 +1,6 @@
 import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
+
 import {
   DM_Sans as DMSans,
   Lora as LoraFont,
@@ -8,6 +9,7 @@ import {
 import './globals.css';
 
 import { SiteChrome } from '@/components/chrome/SiteChrome';
+import { DelayedAnalytics } from '@/components/analytics/DelayedAnalytics';
 
 const dmSans = DMSans({
   subsets: ['latin'],
@@ -35,32 +37,61 @@ export const viewport: Viewport = {
   initialScale: 1,
 };
 
+const siteUrl = (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, '');
+const googleSiteVerification =
+  process.env.NEXT_PUBLIC_GOOGLE_SITE_VERIFICATION ?? 'qYxBlupRk_F93sVcyZgfMec3M6gIt_d6GzTrQdZ0NiA';
+const bingSiteVerification = process.env.NEXT_PUBLIC_BING_SITE_VERIFICATION;
+
 export const metadata: Metadata = {
-  metadataBase: new URL(
-    (process.env.NEXT_PUBLIC_SITE_URL ?? 'http://localhost:3000').replace(/\/$/, ''),
-  ),
+  metadataBase: new URL(siteUrl),
   title: {
     default: 'YourBlog',
     template: '%s · YourBlog',
   },
-  description: 'Editorial blog demo built with Next.js.',
+  description:
+    'A personal blog exploring Art, History, Literature, Music, Science, Screen, Sports, Technology, and True Crime - one story at a time.',
   alternates: {
     canonical: '/',
+    types: {
+      'application/rss+xml': `${siteUrl}/rss.xml`,
+    },
   },
   openGraph: {
     type: 'website',
     siteName: 'YourBlog',
     url: '/',
     title: 'YourBlog',
-    description: 'Editorial blog demo built with Next.js.',
+    description:
+      'A personal blog exploring Art, History, Literature, Music, Science, Screen, Sports, Technology, and True Crime - one story at a time.',
     locale: 'en_US',
   },
   twitter: {
     card: 'summary_large_image',
     title: 'YourBlog',
-    description: 'Editorial blog demo built with Next.js.',
+    description:
+      'A personal blog exploring Art, History, Literature, Music, Science, Screen, Sports, Technology, and True Crime - one story at a time.',
+  },
+  icons: {
+    icon: [
+      { url: '/favicon-16x16.png', sizes: '16x16', type: 'image/png' },
+      { url: '/favicon-32x32.png', sizes: '32x32', type: 'image/png' },
+    ],
+    apple: '/apple-touch-icon.png',
+  },
+  manifest: '/site.webmanifest',
+  verification: {
+    google: googleSiteVerification,
+    ...(bingSiteVerification
+      ? {
+          other: {
+            'msvalidate.01': bingSiteVerification,
+          },
+        }
+      : {}),
   },
 };
+
+const gaId = process.env.NEXT_PUBLIC_GA_ID;
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -70,6 +101,7 @@ export default function RootLayout({ children }: { children: ReactNode }) {
     >
       <body>
         <SiteChrome>{children}</SiteChrome>
+        {gaId ? <DelayedAnalytics gaId={gaId} /> : null}
       </body>
     </html>
   );

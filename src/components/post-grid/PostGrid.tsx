@@ -10,14 +10,10 @@ type CoverLike = { src?: string | null; alt?: string | null };
 export type PostGridPost = {
   slug: string;
   title: string;
-
   categoryLabel?: string | null;
   topicSlug?: string | null;
-
   topic?: { label?: string | null; slug?: string | null } | null;
-
   cover?: CoverLike | null;
-
   coverSrc?: string | null;
   coverAlt?: string | null;
 };
@@ -34,66 +30,47 @@ function toText(value: unknown) {
 
 function pickCoverSrc(post: PostGridPost) {
   const a = toText(post.cover?.src);
-  if (a.length > 0) {
-    return a;
-  }
+  if (a.length > 0) return a;
 
   const b = toText(post.coverSrc);
-  if (b.length > 0) {
-    return b;
-  }
+  if (b.length > 0) return b;
 
   return '';
 }
 
 function pickCoverAlt(post: PostGridPost) {
   const a = toText(post.cover?.alt);
-  if (a.length > 0) {
-    return a;
-  }
+  if (a.length > 0) return a;
 
   const b = toText(post.coverAlt);
-  if (b.length > 0) {
-    return b;
-  }
+  if (b.length > 0) return b;
 
   return post.title;
 }
 
 function pickCategory(post: PostGridPost) {
   const a = toText(post.categoryLabel);
-  if (a.length > 0) {
-    return a;
-  }
+  if (a.length > 0) return a;
 
   const b = toText(post.topic?.label);
-  if (b.length > 0) {
-    return b;
-  }
+  if (b.length > 0) return b;
 
   return '';
 }
 
 function pickTopicSlug(post: PostGridPost) {
   const a = toText(post.topicSlug);
-  if (a.length > 0) {
-    return a;
-  }
+  if (a.length > 0) return a;
 
   const b = toText(post.topic?.slug);
-  if (b.length > 0) {
-    return b;
-  }
+  if (b.length > 0) return b;
 
   return '';
 }
 
 function pickCategoryHref(post: PostGridPost) {
   const topicSlug = pickTopicSlug(post);
-  if (topicSlug.length > 0) {
-    return `/topics/${topicSlug}`;
-  }
-  return '';
+  return topicSlug.length > 0 ? `/topics/${topicSlug}` : '';
 }
 
 export function PostGrid({
@@ -107,7 +84,7 @@ export function PostGrid({
   return (
     <ul className={rootClassName} aria-label={ariaLabel}>
       {safePosts.map((post) => {
-        const coverSrc = directusAssetUrl(pickCoverSrc(post), { key: 'thumb' });
+        const coverSrc = directusAssetUrl(pickCoverSrc(post), { variant: 'thumb' });
         const coverAlt = pickCoverAlt(post);
         const category = pickCategory(post);
         const categoryHref = pickCategoryHref(post);
@@ -126,6 +103,7 @@ export function PostGrid({
                       src={coverSrc}
                       alt={coverAlt}
                       fill
+                      unoptimized
                       sizes="(max-width: 430px) 100vw, 430px"
                       className={styles.img}
                     />

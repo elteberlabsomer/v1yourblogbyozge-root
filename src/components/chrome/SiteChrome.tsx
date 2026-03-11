@@ -1,17 +1,26 @@
 'use client';
 
 import type { ReactNode } from 'react';
+import dynamic from 'next/dynamic';
 import { usePathname } from 'next/navigation';
 
 import { useChromeBehavior } from './useChromeBehavior';
 import { Header } from './Header';
-import { Drawer } from './Drawer';
-import { SearchOverlay } from './SearchOverlay';
 import { Footer } from './Footer';
 
 type SiteChromeProps = {
   children: ReactNode;
 };
+
+const LazyDrawer = dynamic(
+  () => import('./Drawer').then((mod) => mod.Drawer),
+  { ssr: false, loading: () => null },
+);
+
+const LazySearchOverlay = dynamic(
+  () => import('./SearchOverlay').then((mod) => mod.SearchOverlay),
+  { ssr: false, loading: () => null },
+);
 
 export function SiteChrome({ children }: SiteChromeProps) {
   const pathname = usePathname();
@@ -40,9 +49,9 @@ export function SiteChrome({ children }: SiteChromeProps) {
         onSearchClick={openSearch}
       />
 
-      <Drawer isOpen={drawerOpen} onClose={closeDrawer} />
+      {drawerOpen ? <LazyDrawer isOpen={drawerOpen} onClose={closeDrawer} /> : null}
 
-      <SearchOverlay isOpen={searchOpen} onClose={closeSearch} />
+      {searchOpen ? <LazySearchOverlay isOpen={searchOpen} onClose={closeSearch} /> : null}
 
       <main id="main-content" className="c-chrome-main">
         {children}
